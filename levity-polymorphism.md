@@ -111,3 +111,51 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 > a primitive value might be represented by a pointer to a heap-allocated object. Examples include Array#, the type of primitive arrays. Thus, Array# is an unlifted, boxed type. A primitive array is heap-allocated because it is too big a value to fit in a register, and would be too expensive to copy around; in a sense, it is accidental that it is represented by a pointer.
 
 - [What are lifted and unlifted product types in Haskell?](https://stackoverflow.com/questions/39985296/what-are-lifted-and-unlifted-product-types-in-haskell)
+
+## Unboxed tuples
+
+`Int#` や `Double#` などの `unboxed primitive tpyes` に加えて、`Haskell` は `unboxed tuples` をサポートしている。通常の `boxed tuple` は `(Int, Bool)` といった型であり、これはヒープに確保されたタプル要素へのポインタのベクターとして表される。よって、`boxed tuple` の全ての要素は `boxed` となる。そのため、`Boxed tuples` は `lazy` であるが、設計としては自由選択で良い。
+
+関数から返ってくる複数の値をサポートするために考えられた既存の方法を使えば、`unboxed tuple` は複数の値同士を結びつけるための、単なる `Haskell` の構文にすぎない。`Unboxed tuples` はどんな場合でも実行時では存在しない。例えば
+
+```haskell
+divMod :: Int -> Int -> (# Int, Int #)
+```
+
+`divMod` は2つの整数を返す。`Haskell` プログラマーは `divMod` を以下のように利用することがある
+
+```haskell
+case divMod n k of (# quot, rem #) -> ...
+```
+
+`case` を使ってタプルの構成要素を分解する。しかしながら、コンパイルの段階において、`unboxed tuple` は完全に消えてしまっている。`divMod` 関数は分離されたレジスタに保存された2つの値を返すコードにコンパイルされる。`case` 文はそれら2つの値を `quot` と `rem` に単純に束縛するだけのコードにコンパイルされる。これは、タプルのヒープ確保と間接参照を回避できるため、同等の `boxed tuples` バージョンよりも効率的である。
+
+`GHC` のモダンバージョンでは、`unboxed tuples` は関数の引数のように用いることを許可している。`(+) :: (# Int, Int #) -> Int` 関数はコンパイルすると `(+) :: Int -> Int -> Int` と全く同じコードを生成する。そのため、`unboxed tuple` は複数のレジスタを経由して複数の引数を受け渡すことを、単に表すために利用される。
+
+`unboxed tuples` の興味深い側面として、本論文の展開として重要な事柄がある。それは、ネスティングは計算上無関係となる事実である。
+
+```
+(# Int, (# Float#, Bool #) #)
+(# Int, Float#, Bool #)
+```
+
+上記の2つの値の型は確かに異なるが、実行時では両者を同一視することができる。なぜなら、どちらも、3つのレジスタを経由して、返ってきた (または渡された) 3つの値を表現しているからである。
+
+# Unboxed types and polymorphism
+イントロダクションで定義した `bTwice` を思い出そう。
+
+``` haskell
+bTwice :: forall a. Bool -> a -> (a -> a) -> a
+bTwice b x f = case b of True  -> f (f x)
+                         False -> x
+```
+
+多相的な言語を扱う、多くのコンパイラのように、`GHC` は `x::a` がヒープポインタによって統一された表現として、多相型の値を家庭している。そうすると、 `bTwice` は `x::Int#` や `x::Float#` や `x::(# Int, Int #)` に対して呼び出すことができない。実際に、 `bTwice` は `ByteArray#` のような `boxed unlifted value` にすら利用できない。なぜだめなのだろうか？それは、 `a` が `(f (f x))` の呼び出しで `unlifted` であれば、 `call-by-value` を利用してコンパイルすべきであり、一方で、 `a` が `lifted type` であれば、 `call-by-need` でコンパイルすべきである。
+
+`GHC` はそのため、以下の原理を採用する。
+
+- `The Instantiation Principle`。`unlifted type` によって、多相型変数をインスタンス化してはならない。
+
+これは、プログラマにとっては厄介であるが、堅実な効率の保証を得られる。(代替案としては、8章で議論する何らかの `auto-specialization` となるだろう)。しかしながら、この `instantiation principle` を撤廃することが、超絶技巧の結果であると誤解されないように、我々は残りの章を苦労して書き上げた。
+
+## 3.1 Kinds
