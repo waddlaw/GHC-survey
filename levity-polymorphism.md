@@ -12,7 +12,7 @@ bTwice b x f = case b of True  -> f (f x)
 - `the same function` == the same compiled code for `bTwice` works for any type of argument `x`
 - `the colling convention`
   - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
-  - 具体例 (1): `x` が `[a]` (リスト) の場合、ヒープを指し示すレジスタに渡される
+  - 具体例 (1): `x` が `[a]` (リスト) の場合、ヒープを指し示すレジスタに渡される
   - 具体例 (2): `x` が `Double` 型の場合、`special floating-point register` に渡される
   
 
