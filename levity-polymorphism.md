@@ -11,6 +11,7 @@ bTwice b x f = case b of True  -> f (f x)
 ```
 
 - この関数は `polymorphic` in `a`
+  - 今後出てくる `polymorphic` は全て `parametric polymorphism` のこと
 - `the same function` == the same compiled code for `bTwice` works for any type of argument `x`
 - `the colling convention`
   - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
@@ -30,3 +31,9 @@ bTwice b x f = case b of True  -> f (f x)
 
 - [Cyclone is a safe dialect of C.](https://cyclone.thelanguage.org/)
 - [Cyclone - wikipedia](https://en.wikipedia.org/wiki/Cyclone_(programming_language))
+
+# 2. Background: performance through unboxed types
+
+## 2.1 Unboxed values
+
+1~n までの整数の合計を計算する以下のループを考える。
