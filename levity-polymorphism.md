@@ -1,6 +1,8 @@
 # Levity Polymorphism (extended version)
 
-* [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
+- [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
+- [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
+- [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 
 # 1. The cost of polymorphism
 
@@ -96,7 +98,7 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 
 `Haskell` もまた `levity` を検討する必要がある。これは、`lifted` と `unlifted` の選択を意味する。`lifted type` は `lazy` である。これは、`lifted` だと思われる。なぜなら、`lifted` ヒープに1つ余分な要素が1つあり、これが非決定性計算を表現しているからである。例えば、`Haskell` の `Bool` 型は `lifted` であり、`True`, `False`, `⊥` のうちのどれかである。それに対して `unlifted type` は `strict` である。そのため、`⊥` は `unlifted type` には存在しない。
 
-なぜなら、 `Haskell` は `lifted type` は `boxed` にならなければならないという制約を、実行時にサンクとすることで、遅延評価を表現している。
+なぜなら、 `Haskell` は `lifted type` は `boxed` にならなければならないという制約を、実行時にサンクとすることで、遅延評価を表現しているからである。
 
 
 
