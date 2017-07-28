@@ -86,5 +86,10 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 ここで、 `Int` はデータコンストラクタ `I#` と `Int#` 型のフィールドを1つ持つ、通常の代数的データ型であり、特別なことは何もない。
 `plusInt` 関数は単純に自身の引数でパターンマッチを行い、それらにマッチしたコンテンツ (`Int#` 型の値 `i1`, `i2`) を `(+#)` を使って足しあわせ、`I#` で結果を `box` にする。
 
+------
+
+- [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
+- [GHC.Prim](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/ghc-prim-0.5.1.0/GHC-Prim.html)
+
 ## 2.2 Boxed vs. unboxed and lifted vx. unlifted
 
