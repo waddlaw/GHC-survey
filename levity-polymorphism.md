@@ -1,6 +1,8 @@
 # Levity Polymorphism (extended version)
 
-# The cost of polymorphism
+* [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
+
+# 1. The cost of polymorphism
 
 ``` haskell
 bTwice :: forall a. Bool -> a -> (a -> a) -> a
