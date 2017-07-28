@@ -83,7 +83,7 @@ plusInt :: Int -> Int -> Int
 plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 ```
 
-ここで、 `Int` はデータコンストラクタ `I#` と `Int#` 型のフィールドを1つ持つ、通常の代数的データ型であり、特別なことは何もない。
+ここで、 `Int` はデータコンストラクタ `I#` と、単一の `Int#` 型のフィールドを持つ、通常の代数的データ型であり、特別なことは何もない。
 `plusInt` 関数は単純に自身の引数でパターンマッチを行い、それらにマッチしたコンテンツ (`Int#` 型の値 `i1`, `i2`) を `(+#)` を使って足しあわせ、`I#` で結果を `box` にする。
 
 ------
@@ -91,5 +91,21 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 - [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
 - [GHC.Prim](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/ghc-prim-0.5.1.0/GHC-Prim.html)
 
-## 2.2 Boxed vs. unboxed and lifted vx. unlifted
+## 2.2 Boxed vs. unboxed and lifted vs. unlifted
+一般的には、`boxed value` はヒープへのポインタとして表されるが、その一方で `unboxed value` は値自身である。それゆえ、`unboxed value` はサンクになることができず、 `unboxed` 型の引数は必ず値として渡されることとなる。
 
+`Haskell` もまた `levity` を検討する必要がある。これは、`lifted` と `unlifted` の選択を意味する。`lifted type` は `lazy` である。これは、`lifted` だと思われる。なぜなら、`lifted` ヒープに1つ余分な要素が1つあり、これが非決定性計算を表現しているからである。例えば、`Haskell` の `Bool` 型は `lifted` であり、`True`, `False`, `⊥` のうちのどれかである。それに対して `unlifted type` は `strict` である。そのため、`⊥` は `unlifted type` には存在しない。
+
+なぜなら、 `Haskell` は `lifted type` は `boxed` にならなければならないという制約を、実行時にサンクとすることで、遅延評価を表現している。
+
+
+
+--------
+
+- [9.2.1. Unboxed types](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types)
+
+> Note: a “boxed” type means that a value is represented by a pointer to a heap object; a “lifted” type means that terms of that type may be bottom.
+
+> a primitive value might be represented by a pointer to a heap-allocated object. Examples include Array#, the type of primitive arrays. Thus, Array# is an unlifted, boxed type. A primitive array is heap-allocated because it is too big a value to fit in a register, and would be too expensive to copy around; in a sense, it is accidental that it is represented by a pointer.
+
+- [What are lifted and unlifted product types in Haskell?](https://stackoverflow.com/questions/39985296/what-are-lifted-and-unlifted-product-types-in-haskell)
