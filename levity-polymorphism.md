@@ -1,6 +1,7 @@
 # Levity Polymorphism (extended version)
 
 - [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
+- [NoSubKinds](https://ghc.haskell.org/trac/ghc/wiki/NoSubKinds)
 - [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 
@@ -195,3 +196,4 @@ instance Monad ((->) env) where
 
 `GHC` には `Type` と `#` の `super-kind` として `OpenKind` がある。
 
+不確かな `sub-kinding` のコンパイル処理を避けるために、 `kind inference` を行う。`GHC` はこの奇妙な `OpenKind` を引数に取る `(->)` について、`fully-saturated` な場合のみに利用することを明記している。仮に `(->)` を部分適用したとすると、上述した `kind` とは程遠い `Type -> Type -> Type` となってしまう。
