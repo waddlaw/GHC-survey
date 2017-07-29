@@ -159,3 +159,39 @@ bTwice b x f = case b of True  -> f (f x)
 これは、プログラマにとっては厄介であるが、堅実な効率の保証を得られる。(代替案としては、8章で議論する何らかの `auto-specialization` となるだろう)。しかしながら、この `instantiation principle` を撤廃することが、超絶技巧の結果であると誤解されないように、我々は残りの章を苦労して書き上げた。
 
 ## 3.1 Kinds
+コンパイラはどのようにして、`instantiation principle` を実装しているのだろうか？例えば、型が `unlifted` だとわかっている場合にどんな処理を行うか？
+
+`Haskell` は項を型によって分類するように、`kind` によって型を分類する。例えば、`Bool :: Type`, `Maybe :: Type -> Type`, `Maybe Bool :: Type` などだ。そのため、`kind` を用いることで自然に型を `lifted` と `unlifted` の形式に分類できるため、`Int# :: #`, `Float# :: #` となる。ただし、 `#` は `unlifted type` を分類するための新しい `kind` である。
+
+`unlifted type` では `#` を用いたが、`lifted type` では `Type` を用いる。`laziness` のため、`lifted type` の値はヒープへのポインタによって統一的に表現されなければならない。そのため、`Instantiation Principle` は次のように読み替えることができる。`全ての多相型変数は `Type kind` を持つ。例として、`kind` を明示的に指定した `bTwice` を示す。
+
+```haskell
+bTwice :: forall (a :: Type). Bool -> a -> (a -> a) -> a
+```
+
+ここで、`Float# :: #` 型をインスタンス化しようとすると、`kind` エラーが発生する。なぜなら、`Type` と `#` は異なる `kind` だからだ。
+
+## Sub-kinding
+Haskell はリッチな型言語である。特に興味深いのは、アロー関数 `(->)` が以下の `kind` で `binary type constructor` となる点である。
+
+```hasell
+(->) :: Type -> Type -> Type
+```
+
+`(->)` の部分適用は時に有用である。
+
+```haskell
+instance Monad ((->) env) where
+  -- note that env is the left argument to (->)
+  return x = ¥env -> x
+  ma >>= fmb = ¥env -> fmb (ma env) env
+```
+
+上述の `kind` によって、`Monad ((->) env)` 型は `well-kinded` である。
+
+しかし、ここで深刻な問題に直面する。`sumTo# :: Int# -> Int# -> Int#` のような `unlifted type` を扱う関数の場合、`ill-kinded` となってしまう。なぜだろうか？それは、`(->)` は `Type` を期待しているが、`Int# :: #` となっているためである。この問題は `unboxed value` の時からずっと `GHC` について回っている。長い期間、この問題に対する解決策は、以下に図示するような `sub-kinding` 関係によってサポートすることだった。
+
+> 図を入れる
+
+
+
