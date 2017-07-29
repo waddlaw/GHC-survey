@@ -13,7 +13,7 @@ bTwice b x f = case b of True  -> f (f x)
 ```
 
 - この関数は `polymorphic` in `a`
-  - 今後出てくる `polymorphic` は全て `parametric polymorphism` のこと。それとは別に `ad-hoc polymorphism` などがある。(これは `Haskell` では主に型クラス等を使って実現)
+  - 今後出てくる `polymorphic` は全て `parametric polymorphism` のこと。それとは別に `ad-hoc polymorphism` などがある。(これは `Haskell` では主に型クラス等を使って実現)
 - `the same function` == the same compiled code for `bTwice` works for any type of argument `x`
 - `the colling convention`
   - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
