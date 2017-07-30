@@ -215,7 +215,7 @@ instance Monad ((->) env) where
 
 - 型理論の分野に明るく、物事をきっちりする学生が、メーリングリストに突然現れ、なぜこんな動作になるのか？ `(->) :: Type -> Type -> Type` のとき、 `GHC` は `Int# -> Double#` のような型を受理するのか？
 - これは、(a) 型推論, (b) ポリモーフィズム, (c) サブタイピングのコンビネーションとしてよく知られている問題である。そして、`GHC` の型推論の実装では、素晴らしい部分と `sub-kinding` による原理化されていない特殊なケースで穴だらけになっている。
-- `kind polymorphism`[17](./#17) のイントロダクションでこのシチュエーションが最悪だと述べている。また、その後の `kind equalities`[16] のイントロダクションでは、全くもって論理的ではないと述べられている。
+- `kind polymorphism`[17](#17) のイントロダクションでこのシチュエーションが最悪だと述べている。また、その後の `kind equalities`[16] のイントロダクションでは、全くもって論理的ではないと述べられている。
 - `OpenKind` kind はエラーメッセージの出現をわかりづらくする
 
 結局のところ、`sub-kinding` は全くもって満足いく解決策ではなかった。そのため、何か別の良い解決策を探すようになった。
@@ -235,5 +235,5 @@ instance Monad ((->) env) where
 - [System FC with Explicit Kind Equality](http://www.cis.upenn.edu/~justhsu/docs/nokinds.pdf)
 - [System FC with Explicit Kind Equality (Extended Version)](http://repository.brynmawr.edu/cgi/viewcontent.cgi?article=1014&context=compsci_pubs)
 
-[<a name="#17">17</a>] B. A. Yorgey, S. Weirich, J. Cretin, S. Peyton Jones, D. Vytiniotis, and J. P. Magalhaes. Giving Haskell a promotion. In *Types in Language Design and Implementation*, TLDI '12. ACM, 2012.
+[<a name="17">17</a>] B. A. Yorgey, S. Weirich, J. Cretin, S. Peyton Jones, D. Vytiniotis, and J. P. Magalhaes. Giving Haskell a promotion. In *Types in Language Design and Implementation*, TLDI '12. ACM, 2012.
 - [Giving Haskell a Promotion](http://www.seas.upenn.edu/~sweirich/papers/tldi12.pdf)
