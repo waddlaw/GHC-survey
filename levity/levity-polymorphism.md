@@ -141,7 +141,7 @@ Haskell もまた `levity` を検討する必要がある。これは、`lifted`
 
 なぜなら、 Haskell は実行時にサンクとして遅延計算を表現しているため、全ての lifted type は boxed でなければならない。しかしながら、これは unlifted type が boxed な場合もある。図1は boxity と lexity の関係性をまとめ、３箇所のスペースに入る可能性がある具体例をいくつか入れたものである。
 
-> 図を入れる
+![Boxity and levity, with examples](/levity/images/fig1.png "Boxity and levity, with examples")
 
 ## Unboxed tuples
 
@@ -230,7 +230,7 @@ instance Monad ((->) env) where
 
 しかし、ここで深刻な問題に直面する。`sumTo# :: Int# -> Int# -> Int#` のような `unlifted type` を扱う関数の場合、`ill-kinded` となってしまう。なぜだろうか？それは、`(->)` は `Type` を期待しているが、`Int# :: #` となっているためである。この問題は `unboxed value` の時からずっと `GHC` について回っている。長い期間、この問題に対する解決策は、以下に図示するような `sub-kinding` 関係によってサポートすることだった。
 
-![sub-kinding relation](https://github.com/waddlaw/GHC8.2.1-survey/blob/master/levity/images/fig1.png "sub-kinding relation")
+![sub-kinding relation](/levity/images/inline-fig1.png "sub-kinding relation")
 
 `GHC` には `Type` と `#` の `super-kind` として `OpenKind` がある。
 
