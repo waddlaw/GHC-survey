@@ -14,12 +14,13 @@
 | Term | 用語 |
 | :---- | :----- |
 | abstract representation | 抽象表現 |
-| unboxed value | unboxed value |
 | colling convention | 呼出規約 |
 | kind | カインド |
+| levity polymorphism | levity porimorphism |
 | polymorphic | 多相的 |
 | polymorphism | ポリモーフィズム |
 | sub-typing | サブタイピング |
+| unboxed value | unboxed value |
 
 
 
@@ -42,20 +43,12 @@ bTwice b x f = case b of True  -> f (f x)
 本論文では、既に普及しているポリモーフィズムにおいてハイパフォーマンスを実現させるための斬新で新しい手法を提案する。以下に概要を示す。
 
 - 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
-- メモリレイアウトと呼出規約の記述方法について原理化した上で、一歩先に進み `levity polymorphism` を採用する。これにより、固定された値か格納されたデータかを表す抽象表現によって、メモリレイアウトの選択が抽象化された (`abstracted`) 関数を許可できる。([5章]())
+- メモリレイアウトと呼出規約の記述方法について原理化した上で、一歩先に進み `levity polymorphism` を採用する。これにより、固定された値か格納されたデータかを表す抽象表現によって、メモリレイアウトの選択が抽象化された (`abstracted`) 関数を許可できる ([5章](#5-taming-levity-polymorphism))。我々が始めて levity polymorphism を記述・実装したと信じている。
+- 
 
 
 
-
-
-- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
-- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
-
-
-
-
-
-
+Levity polymorphism は2016年の初めにリリースされた GHC バージョン 8.0.1 で実装された。我々はこの手法でカインドを利用することは実は初めてではない。Cyclone[[5]](#5) は8.1章と同様の手法を利用している。しかし、我々が知る他のどんなコンパイラよりも洗礼されたアイデアを採用し、最高の結果となった。忘れないで欲しいことは、これは全てパフォーマンスに関する内容である。もし、パフォーマンスを気にする必要が無ければ人生はもっと楽なのだが。
  
 ------
 
@@ -289,6 +282,9 @@ myError s = error ("Program error  " ++ s)
 # 8. Polymorphism in other languages
 
 # References
+
+[<a name="5">5</a>] D. Grossman. Quantified types in an imperative language. *ACM Trans. Program. Lang. Syst.,* 28(3):429-475, May 2006.
+- [Quantified Types in an Imperative Language](https://homes.cs.washington.edu/~djg/papers/qtil.pdf)
 
 [<a name="9">9</a>] S. Marlow (editor). Haskell 2010 language report, 2010.
 - [Haskell 2010 Language Report (pdf)](https://www.haskell.org/definition/haskell2010.pdf)
