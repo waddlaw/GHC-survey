@@ -7,7 +7,11 @@
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 - [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
 
+# Abstract
+
 # 1. The cost of polymorphism
+
+以下のような `Haskell` の関数を考察する。
 
 ``` haskell
 bTwice :: forall a. Bool -> a -> (a -> a) -> a
@@ -15,7 +19,7 @@ bTwice b x f = case b of True  -> f (f x)
                          False -> x
 ```
 
-- この関数は `polymorphic` in `a`
+- この関数は `polymorphic`<sup>1</sup> in `a`
   - 今後出てくる `polymorphic` は全て `parametric polymorphism` のこと。それとは別に `ad-hoc polymorphism` などがある。(これは `Haskell` では主に型クラス等を使って実現)
 - `the same function` == the same compiled code for `bTwice` works for any type of argument `x`
 - `the colling convention`
@@ -36,6 +40,10 @@ bTwice b x f = case b of True  -> f (f x)
 
 - [Cyclone is a safe dialect of C.](https://cyclone.thelanguage.org/)
 - [Cyclone - wikipedia](https://en.wikipedia.org/wiki/Cyclone_(programming_language))
+
+------
+
+1. 我々が `polomorphism` という用語を用いる場合は全て `parametric polymorphism` の意味である。
 
 # 2. Background: performance through unboxed types
 本論文が取り組むパフォーマンスへの挑戦を最初に記述する。我々はこれからの議論を具体的にするため `Haskell`<sup>2</sup> と `GHC` コンパイラを用いるが、多くの事柄が、他の多相的な言語にも同様に適用できる。他の言語とコンパイラについては8章で議論する。
@@ -66,7 +74,7 @@ sumTo acc n = sumTo (acc + n) (n - 1)
 これに対して、`C` コンパイラは `a three-machine-instruction loop` を利用するため、メモリへのアクセスは全く発生しない。
 これが、パフォーマンスに莫大な差を与える。
 
-そのため、`GHC` では `unboxed integer` を表す `Int#` 型が組み込みで提供されている[12]。
+そのため、`GHC` では `unboxed integer` を表す `Int#` 型が組み込みで提供されている[[12]](#12)。
 `Int#` はポインタによる表現ではなく、整数値自身である。
 
 `unboxed integer` を使った `sumTo` の実装は次のようになる。<sup>4</sup>
@@ -183,7 +191,7 @@ bTwice :: forall (a :: Type). Bool -> a -> (a -> a) -> a
 
 ------
 
-5. `Haskell Report`[9] では任意の型の `kind` を `*` 記号を使って表している。しかし、コミュニティでは新しいスペル `Type` が使われ始めている。これは `GHC 8` で利用可能である。我々は本論文において、`*` の代わりに `Type` を用いる。
+5. `Haskell Report`[[9]](#9) では通常の型の `kind` を `*` 記号を使って表している。しかし、コミュニティでは新しいスペル `Type` が使われ始めている。これは `GHC 8` で利用可能である。我々は本論文において、`*` の代わりに `Type` を用いる。
 
 ## Sub-kinding
 Haskell はリッチな型言語である。特に興味深いのは、アロー関数 `(->)` が以下の `kind` で `binary type constructor` となる点である。
@@ -215,12 +223,42 @@ instance Monad ((->) env) where
 
 - 型理論の分野に明るく、物事をきっちりする学生が、メーリングリストに突然現れ、なぜこんな動作になるのか？ `(->) :: Type -> Type -> Type` のとき、 `GHC` は `Int# -> Double#` のような型を受理するのか？
 - これは、(a) 型推論, (b) ポリモーフィズム, (c) サブタイピングのコンビネーションとしてよく知られている問題である。そして、`GHC` の型推論の実装では、素晴らしい部分と `sub-kinding` による原理化されていない特殊なケースで穴だらけになっている。
-- `kind polymorphism`[[17]](#17) のイントロダクションでこのシチュエーションが最悪だと述べている。また、その後の `kind equalities`[16] のイントロダクションでは、全くもって論理的ではないと述べられている。
+- `kind polymorphism`[[17]](#17) のイントロダクションでこのシチュエーションが最悪だと述べている。また、その後の `kind equalities`[[16]](#16) のイントロダクションでは、全くもって論理的ではないと述べられている。
 - `OpenKind` kind はエラーメッセージの出現をわかりづらくする
 
 結局のところ、`sub-kinding` は全くもって満足いく解決策ではなかった。そのため、何か別の良い解決策を探すようになった。
 
 ## 3.3 Functions that diverge
+
+次のような関数を考える。
+
+```haskell
+f :: Int# -> Int#
+f n = if n <# 0# then error "Negative argument" else n /# 2#
+```
+
+ここで `error :: forall a. String -> a` は文字列を表示し、実行を停止する<sup>7</sup>。
+しかし、`Instantiation Principle` によって、この `error` の呼び出しはリジェクトされる。なぜなら、`a` が `Int#` でインスタンス化されてしまうからである。しかし、この場合は、`Instantiation Principle` を壊していないのでこれで良い。なぜ？それは、`error` 関数は `a` 型の値に対して何もせず、単に実行を停止するのみだからである。この動作は `error` の正しい利用法として厄介であり、この方法ではリジェクトされてしまう。そのため、`GHC`が与える `error` の型は `magical type` となっている。
+
+```haskell
+forall (a :: OpenKind). String -> a
+```
+
+現在、上述したように `sub-kinding mechanism` を利用し、呼び出しを受理している。この魔法は壊れやすい。もし、ユーザが次のような `error` の変種を記述したらどうだろうか。
+
+```haskell
+myError :: String -> a
+myError s = error ("Program error  " ++ s)
+```
+
+`GHC` は型 `forall (a :: Type). String -> a` を推論するため、魔法はとけてしまう。
+
+------------
+
+7. より正確には、例外を投げる。
+
+# 4. Key idea: polymorphism, not sub-kinding
+
 
 # References
 
