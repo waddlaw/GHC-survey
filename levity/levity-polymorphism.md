@@ -7,6 +7,20 @@
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 - [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
 
+## 対訳表
+
+アルファベット順
+
+| Term | 用語 |
+| :---- | :----- |
+| colling convention | 呼出規約 |
+| kind | カインド |
+| polymorphic | 多相的 |
+| polymorphism | ポリモーフィズム |
+| sub-typing | サブタイピング |
+
+
+
 # Abstract
 
 # 1. The cost of polymorphism
@@ -19,16 +33,16 @@ bTwice b x f = case b of True  -> f (f x)
                          False -> x
 ```
 
-- この関数は `polymorphic`[<sup>1</sup>](#note-1) in `a`
-  - 今後出てくる `polymorphic` は全て `parametric polymorphism` のこと。それとは別に `ad-hoc polymorphism` などがある。(これは `Haskell` では主に型クラス等を使って実現)
-- `the same function` == the same compiled code for `bTwice` works for any type of argument `x`
-- `the colling convention`
-  - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
-  - 具体例 (1): `x` が `[a]` (リスト) の場合、ヒープを指し示すレジスタに渡される
-  - 具体例 (2): `x` が `Double` 型の場合、`special floating-point register` に渡される
-  
+この関数は `a` について多相的 (`polymorphic`) [<sup>1</sup>](#note-1) である。多相的とは、`x` の型に関わらず、 `f` 及び `a` を入れ替えても、同一の関数で動作することを言う。我々が "同じ関数" と言う時は、常に "`bTwice` をコンパイルした同一のコードが、任意の型の引数 `x` に対して動作することを言う"。しかし、`x`の型の呼出規約 (`colling convention`) に影響される。それゆえ、`bTwice` の実行可能コードとなる。例えば、仮に `x` がリストだったとしよう。これは、ヒープを指し示すレジスタに渡される。倍精度浮動小数点数であれば、特別な浮動小数点レジスタに渡されるだろう。すなわち、ポリモーフィズムでは共有コードが衝突する。
 
-`Thus, sharing code conflicts with polymorphism` を解決するための単純で広く用いられる方法は、全ての値を `ヒープに格納された値を指すポインタ` として表現すること。 (`sharing code conflicts` がよくわかっていない)
+単純で広く利用されている解決策としては、全ての値をヒープに確保されたオブジェクトへのポインタとして表現することである。この手法の欠点は非常に処理が遅い点にある [(2.1章)](#2.1 Unboxed values)
+
+
+
+  - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
+  - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
+
+
 
 - この手法の問題点は `速度が非常に遅い`。
 
