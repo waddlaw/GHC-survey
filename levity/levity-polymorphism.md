@@ -44,7 +44,7 @@ bTwice b x f = case b of True  -> f (f x)
 
 - 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
 - メモリレイアウトと呼出規約の記述方法について原理化した上で、一歩先に進み `levity polymorphism` を採用する。これにより、固定された値か格納されたデータかを表す抽象表現によって、メモリレイアウトの選択が抽象化された (`abstracted`) 関数を許可できる ([5章](#5-taming-levity-polymorphism))。我々が始めて levity polymorphism を記述・実装したと信じている。
-- 
+- 。levity-polymorphic function が実際に具体的なコードへコンパイルされることを保証するために、我々の規則が十分であることを形式的に証明する。([6章]())
 
 
 
@@ -52,7 +52,7 @@ Levity polymorphism は2016年の初めにリリースされた GHC バージョ
  
 ------
 
-<a name="note-1">1</a>. 我々が `polomorphism` という用語を用いる場合は全て `parametric polymorphism` の意味である。
+<a name="note-1">1</a>. 本論文で `polomorphism` という用語を用いる場合は全て `parametric polymorphism` の意味である。
 
 # 2. Background: performance through unboxed types
 本論文が取り組むパフォーマンスへの挑戦を最初に記述する。我々はこれからの議論を具体的にするため `Haskell`[<sup>2</sup>](#note-2) と `GHC` コンパイラを用いるが、多くの事柄が、他の多相的な言語にも同様に適用できる。他の言語とコンパイラについては8章で議論する。
