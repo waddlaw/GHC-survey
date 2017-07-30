@@ -1,12 +1,28 @@
 # Levity Polymorphism (extended version)
 
 - [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
+
+## GHC Developers Trac
+### wiki
 - [NoSubKinds](https://ghc.haskell.org/trac/ghc/wiki/NoSubKinds)
     - [日本語訳](/levity/NoSubKinds.md)
-- [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 - [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
+- [Unlifted data types](https://ghc.haskell.org/trac/ghc/wiki/UnliftedDataTypes)
+- [Unboxed sum types](https://ghc.haskell.org/trac/ghc/wiki/UnpackedSumTypes)
+- [DependentHaskell](https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell)
+- [DependentHaskell/Phase1](https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell/Phase1)
+
+### ticket
+- [Kind polymorphism and unboxed types: bad things are happening](https://ghc.haskell.org/trac/ghc/ticket/11471)
+- [($) returning kind # no longer type checks](https://ghc.haskell.org/trac/ghc/ticket/8739)
+
+## その他
+- [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
+- [Richard Eisenberg - Levity Polymorphism (HiW)](http://ezyang.tumblr.com/post/127984263867/richard-eisenberg-levity-polymorphism-hiw)
 - [11 Levity Polymorphism In Dependent Haskell [fixed audio]](https://www.youtube.com/watch?v=bDdkeKr9vVw)
+- [Richard A. Eisenberg - Levity Polymorphism](https://www.youtube.com/watch?v=lSJwXZ7vWBw)
+- [GHC.Types](https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/GHC/Types.hs)
 
 ## 対訳表
 
