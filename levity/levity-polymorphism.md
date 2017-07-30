@@ -106,6 +106,7 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 ------
 
 <a name="note-3">3</a>. 思い出して欲しい、`Haskell` は遅延言語である。そのため、第二引数は必要となるまで評価されない。
+
 <a name="note-4">4.</a> 接尾辞 `#` はコンパイラによって一切特別な処理が加えられることはない。これは、 `unboxed` な値であることを読者に示唆するための素朴な命名規則である。
 
 - [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
