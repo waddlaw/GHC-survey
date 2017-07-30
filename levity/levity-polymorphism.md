@@ -215,7 +215,7 @@ bTwice :: forall (a :: Type). Bool -> a -> (a -> a) -> a
 
 
 
-## Sub-kinding
+## 3.2 Sub-kinding
 Haskell はリッチな型言語である。特に興味深いのは、アロー関数 `(->)` が以下の `kind` で `binary type constructor` となる点である。
 
 ```hasell
