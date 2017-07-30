@@ -180,9 +180,9 @@ bTwice b x f = case b of True  -> f (f x)
 ## 3.1 Kinds
 コンパイラはどのようにして、`instantiation principle` を実装しているのだろうか？例えば、型が `unlifted` だとわかっている場合にどんな処理を行うか？
 
-`Haskell` は項を型によって分類するように、`kind` によって型を分類する。例えば[<sup>5</sup>](#note-5)、`Bool :: Type`, `Maybe :: Type -> Type`, `Maybe Bool :: Type` などだ。そのため、`kind` を用いることで自然に型を `lifted` と `unlifted` の形式に分類できるため、`Int# :: #`, `Float# :: #` となる。ただし、 `#` は `unlifted type` を分類するための新しい `kind` である。
+`Haskell` は項を型によって分類するように、`kind` によって型を分類する。例えば[<sup>5</sup>](#note-5)、`Bool :: Type`, `Maybe :: Type -> Type`, `Maybe Bool :: Type` などだ。そのため、`kind` を用いることで自然に型を `lifted` と `unlifted` の形式に分類できるため、`Int# :: #`, `Float# :: #` となる。ただし、 `#` は `unlifted type` を分類するための新しい `kind` である[<sup>6</sup>](#note-6)。
 
-`unlifted type` では `#` を用いたが、`lifted type` では `Type` を用いる。`laziness` のため、`lifted type` の値はヒープへのポインタによって統一的に表現されなければならない。そのため、`Instantiation Principle` は次のように読み替えることができる。`全ての多相型変数は `Type kind` を持つ。例として、`kind` を明示的に指定した `bTwice` を示す。
+`unlifted type` では `#` を用いたが、`lifted type` では `Type` を用いる。`laziness` のため、`lifted type` の値はヒープへのポインタによって統一的に表現されなければならない。そのため、`Instantiation Principle` は次のように読み替えることができる。全ての多相型変数は `Type kind` を持つ。例として、`kind` を明示的に指定した `bTwice` を示す。
 
 ```haskell
 bTwice :: forall (a :: Type). Bool -> a -> (a -> a) -> a
@@ -193,6 +193,10 @@ bTwice :: forall (a :: Type). Bool -> a -> (a -> a) -> a
 ------
 
 <a name="note-5">5</a>. `Haskell Report`[[9]](#9) では通常の型の `kind` を `*` 記号を使って表している。しかし、コミュニティでは新しいスペル `Type` が使われ始めている。これは `GHC 8` で利用可能である。我々は本論文において、`*` の代わりに `Type` を用いる。
+
+<a name="note-6">6</a>. この一貫性の無い `#` 記法で取り乱さないでいただきたい。実際に過去の `GHC` で利用されていたものだが、本論文の残りの部分で、より洗礼された道筋を示す。
+
+
 
 ## Sub-kinding
 Haskell はリッチな型言語である。特に興味深いのは、アロー関数 `(->)` が以下の `kind` で `binary type constructor` となる点である。
