@@ -193,7 +193,7 @@ instance Monad ((->) env) where
 
 しかし、ここで深刻な問題に直面する。`sumTo# :: Int# -> Int# -> Int#` のような `unlifted type` を扱う関数の場合、`ill-kinded` となってしまう。なぜだろうか？それは、`(->)` は `Type` を期待しているが、`Int# :: #` となっているためである。この問題は `unboxed value` の時からずっと `GHC` について回っている。長い期間、この問題に対する解決策は、以下に図示するような `sub-kinding` 関係によってサポートすることだった。
 
-![sub-kinding relation](https://github.com/waddlaw/GHC8.2.1-survey/blob/master/fig1.png "sub-kinding relation")
+![sub-kinding relation](https://github.com/waddlaw/GHC8.2.1-survey/blob/master/levity/images/fig1.png "sub-kinding relation")
 
 `GHC` には `Type` と `#` の `super-kind` として `OpenKind` がある。
 
