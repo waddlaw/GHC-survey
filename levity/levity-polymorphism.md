@@ -56,7 +56,7 @@ Levity polymorphism は2016年の初めにリリースされた GHC バージョ
 <a name="note-1">1</a>. 本論文で `polomorphism` という用語を用いる場合は全て `parametric polymorphism` の意味である。
 
 # 2. Background: performance through unboxed types
-本論文が取り組むパフォーマンスへの挑戦を最初に記述する。我々はこれからの議論を具体的にするため `Haskell`[<sup>2</sup>](#note-2) と `GHC` コンパイラを用いるが、多くの事柄が、他の多相的な言語にも同様に適用できる。他の言語とコンパイラについては[8章](8-polymorphism-in-other-languages)で議論する。
+本論文が取り組むパフォーマンスへの挑戦を最初に記述する。我々はこれからの議論を具体的にするため `Haskell`[<sup>2</sup>](#note-2) と `GHC` コンパイラを用いるが、多くの事柄が、他の多相的な言語にも同様に適用できる。他の言語とコンパイラについては[8章](#8-polymorphism-in-other-languages)で議論する。
 
 -----
 <a name="note-2">2</a>. `GHC` はハイパフォーマンスコードをサポートするために、様々な方法で `Haskell` を拡張している。そのため、`Haskell` と記述されている部分は `GHC Haskell` の略だと思って欲しい。
