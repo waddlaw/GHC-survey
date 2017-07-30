@@ -23,6 +23,7 @@
 - [11 Levity Polymorphism In Dependent Haskell [fixed audio]](https://www.youtube.com/watch?v=bDdkeKr9vVw)
 - [Richard A. Eisenberg - Levity Polymorphism](https://www.youtube.com/watch?v=lSJwXZ7vWBw)
 - [GHC.Types](https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/GHC/Types.hs)
+- [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
 
 ## 対訳表
 
@@ -40,6 +41,7 @@
 | polymorphic | 多相的 |
 | polymorphism | ポリモーフィズム |
 | sub-typing | サブタイピング |
+| thunk | サンク |
 | unboxed type | unboxed type |
 | unboxed value | unboxed value |
 
@@ -82,7 +84,7 @@ Levity polymorphism は2016年の初めにリリースされた GHC バージョ
 本論文が取り組むパフォーマンスへの挑戦を最初に記述する。我々はこれからの議論を具体的にするため `Haskell`[<sup>2</sup>](#note-2) と `GHC` コンパイラを用いるが、多くの事柄が、他の多相的な言語にも同様に適用できる。他の言語とコンパイラについては[8章](#8-polymorphism-in-other-languages)で議論する。
 
 -----
-<a name="note-2">2</a>. `GHC` はハイパフォーマンスコードをサポートするために、様々な方法で `Haskell` を拡張している。そのため、`Haskell` と記述されている部分は `GHC Haskell` の略だと思って欲しい。
+<a name="note-2">2</a>. GHC はハイパフォーマンスコードをサポートするために、様々な方法で Haskell を拡張している。そのため、Haskell と記述している部分は GHC Haskell の略だと思って欲しい。
 
 ## 2.1 Unboxed values
 
@@ -94,23 +96,9 @@ sumTo acc 0 = acc
 sumTo acc n = sumTo (acc + n) (n - 1)
 ```
 
-`GHC` は `Int` 型の値を `2ワードのセル` へのポインタとして表現する。
+GHC は `Int` 型の値をヒープに確保した2ワードセルへのポインタとして表現する。最初のワードはディスプリプタであり、次のワードが `Int` の実際の値である。もし、 `sumTo` がこの表現方法によって利用されたなら、この関数はとんでもなく遅いものとなる。なぜなら、それぞれの繰り返しで、第二引数[<sup>3</sup>](#note-3)を評価し、値を得るためにポインタをたどり、ゼロかどうかテストし、ゼロでない場合は、 `(acc + n)` と `(n - 1)` のためのサンクを確保し、同じ処理を繰り返す。これに対して、C コンパイラは three-machine-instruction loop を利用するため、メモリへのアクセスは全く発生しない。これが、パフォーマンスに莫大な差を与える。
 
-- 最初のワードは `descriptor`
-- 次のワードが `Int` の実際の値
-
-`Int` を使って `sumTo` を計算すると、驚くほど遅い。それぞれの繰り返しが第二引数[<sup>3</sup>](#note-3)を評価しようとするためだ。
-
-- 基底部では `sumTo` の第二引数を評価し、`ポインタをたどって` 値を取得し、0かどうか確認する必要がある。
-- 再帰部では、`(acc + n)` と `(n - 1)` のための `サンクを確保` し、再びそれを繰り返す。
-
-これに対して、`C` コンパイラは `a three-machine-instruction loop` を利用するため、メモリへのアクセスは全く発生しない。
-これが、パフォーマンスに莫大な差を与える。
-
-そのため、`GHC` では `unboxed integer` を表す `Int#` 型が組み込みで提供されている[[12]](#12)。
-`Int#` はポインタによる表現ではなく、整数値自身である。
-
-`unboxed integer` を使った `sumTo` の実装は次のようになる。[<sup>4</sup>](#note-4)
+そのため GHC では unboxed integer[[12]](#12) を表す `Int#` 型が組み込みで提供されている。`Int#` はポインタによる表現ではなく、整数値自身である。unboxed integer を使った `sumTo` の実装は次のようになる[<sup>4</sup>](#note-4)。
 
 ```haskell
 sumTo# :: Int# -> Int# -> Int#
@@ -118,13 +106,9 @@ sumTo# acc 0# = acc
 sumTo# acc n = sumTo# (acc +# n) (n -# 1#)
 ```
 
-見た目上のコードは良く似ていても、コンパイルされるコードは大きく異なり、`C` で手書きしたものと、本質的に同等のものが生成される。
+ここでは、さきほどと異なる算術演算子とリテラルを用いているが、見た目上のコードは良く似ている。しかし、コンパイルされるコードは大きく異なり、 C で手書きしたものと、本質的に同等のものが生成される。
 
-`GHC` の正格性解析機とその他の最適化機構により、`sumTo` は `sumTo#` に変換されることがよくある。
-
-また、`Int#` 以外にも `Char#`, `Double#` などの `unboxed type` や、その型のためのプリミティブ演算子が同様に用意されている。
-
-これらの `unboxed values` を使って、`Haskell` の `boxed version` が定義される。
+GHC の正格性解析機とその他の最適化機構により、`sumTo` は `sumTo#` に変換されることがよくある。しかし、この動作が保証 (`guarantee`) されるわけではないため、パフォーマンスを求めるプログラマは直接 unboxed value を利用する。GHC は、`Int#` 以外にも `Char#`, `Double#` などの unboxed type や、その型のためのプリミティブ演算子を同様に用意している。GHC は特別扱いせずに、これらの unboxed values を使って、Haskell の boxed version を定義している。例、
 
 ```haskell
 data Int = I# Int#
@@ -134,16 +118,15 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 ```
 
 ここで、 `Int` はデータコンストラクタ `I#` と、単一の `Int#` 型のフィールドを持つ、通常の代数的データ型であり、特別なことは何もない。
-`plusInt` 関数は単純に自身の引数でパターンマッチを行い、それらにマッチしたコンテンツ (`Int#` 型の値 `i1`, `i2`) を `(+#)` を使って足しあわせ、`I#` で結果を `box` にする。
+`plusInt` 関数は単純に自身の引数でパターンマッチを行い、それらにマッチしたコンテンツ (`Int#` 型の値 `i1`, `i2`) を `(+#)` を使って足しあわせ、`I#` で結果を box にする。
 
 ------
 
-<a name="note-3">3</a>. 思い出して欲しい、`Haskell` は遅延言語である。そのため、第二引数は必要となるまで評価されない。
+<a name="note-3">3</a>. 思い出して欲しい、Haskell は遅延言語である。そのため、第二引数は必要となるまで評価されない。
 
-<a name="note-4">4.</a> 接尾辞 `#` はコンパイラによって一切特別な処理が加えられることはない。これは、 `unboxed` な値であることを読者に示唆するための素朴な命名規則である。
+<a name="note-4">4.</a> 接尾辞 `#` はコンパイラによって一切特別な処理が加えられることはない。これは、 unboxed な値であることを読者に示唆するための素朴な命名規則である。
 
-- [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
-- [GHC.Prim](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/ghc-prim-0.5.1.0/GHC-Prim.html)
+
 
 ## 2.2 Boxed vs. unboxed and lifted vs. unlifted
 一般的には、`boxed value` はヒープへのポインタとして表されるが、その一方で `unboxed value` は値自身である。それゆえ、`unboxed value` はサンクになることができず、 `unboxed` 型の引数は必ず値として渡されることとなる。
