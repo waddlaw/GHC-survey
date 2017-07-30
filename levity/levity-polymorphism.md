@@ -38,6 +38,10 @@ bTwice b x f = case b of True  -> f (f x)
 - [Cyclone - wikipedia](https://en.wikipedia.org/wiki/Cyclone_(programming_language))
 
 # 2. Background: performance through unboxed types
+本論文が取り組むパフォーマンスへの挑戦を最初に記述する。我々はこれからの議論を具体的にするため `Haskell`<sup>2</sup> と `GHC` コンパイラを用いるが、多くの事柄が、他の多相的な言語にも同様に適用できる。他の言語とコンパイラについては8章で議論する。
+
+-----
+2. `GHC` はハイパフォーマンスコードをサポートするために、様々な方法で `Haskell` を拡張している。そのため、`Haskell` と記述されている部分は `GHC Haskell` の略だと思って欲しい。
 
 ## 2.1 Unboxed values
 
@@ -54,7 +58,7 @@ sumTo acc n = sumTo (acc + n) (n - 1)
 - 最初のワードは `descriptor`
 - 次のワードが `Int` の実際の値
 
-`Int` を使って `sumTo` を計算すると、驚くほど遅い。
+`Int` を使って `sumTo` を計算すると、驚くほど遅い。それぞれの繰り返しが第二引数<sup>3</sup>を評価しようとするためだ。
 
 - 基底部では `sumTo` の第二引数を評価し、`ポインタをたどって` 値を取得し、0かどうか確認する必要がある。
 - 再帰部では、`(acc + n)` と `(n - 1)` のための `サンクを確保` し、再びそれを繰り返す。
@@ -62,10 +66,10 @@ sumTo acc n = sumTo (acc + n) (n - 1)
 これに対して、`C` コンパイラは `a three-machine-instruction loop` を利用するため、メモリへのアクセスは全く発生しない。
 これが、パフォーマンスに莫大な差を与える。
 
-そのため、`GHC` では `unboxed integer` を表す `Int#` 型が組み込みで提供されている。
+そのため、`GHC` では `unboxed integer` を表す `Int#` 型が組み込みで提供されている[12]。
 `Int#` はポインタによる表現ではなく、整数値自身である。
 
-`unboxed integer` を使った `sumTo` の実装は次のようになる。
+`unboxed integer` を使った `sumTo` の実装は次のようになる。<sup>4</sup>
 
 ```haskell
 sumTo# :: Int# -> Int# -> Int#
@@ -92,6 +96,9 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 `plusInt` 関数は単純に自身の引数でパターンマッチを行い、それらにマッチしたコンテンツ (`Int#` 型の値 `i1`, `i2`) を `(+#)` を使って足しあわせ、`I#` で結果を `box` にする。
 
 ------
+
+3. 思い出して欲しい、`Haskell` は遅延言語である。そのため、第二引数は必要となるまで評価されない。
+4. 接尾辞 `#` はコンパイラによって一切特別な処理が加えられることはない。これは、 `unboxed` な値であることを読者に示唆するための素朴な命名規則である。
 
 - [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
 - [GHC.Prim](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/ghc-prim-0.5.1.0/GHC-Prim.html)
@@ -144,7 +151,7 @@ case divMod n k of (# quot, rem #) -> ...
 
 上記の2つの値の型は確かに異なるが、実行時では両者を同一視することができる。なぜなら、どちらも、3つのレジスタを経由して、返ってきた (または渡された) 3つの値を表現しているからである。
 
-# Unboxed types and polymorphism
+# 3. Unboxed types and polymorphism
 イントロダクションで定義した `bTwice` を思い出そう。
 
 ``` haskell
@@ -164,7 +171,7 @@ bTwice b x f = case b of True  -> f (f x)
 ## 3.1 Kinds
 コンパイラはどのようにして、`instantiation principle` を実装しているのだろうか？例えば、型が `unlifted` だとわかっている場合にどんな処理を行うか？
 
-`Haskell` は項を型によって分類するように、`kind` によって型を分類する。例えば、`Bool :: Type`, `Maybe :: Type -> Type`, `Maybe Bool :: Type` などだ。そのため、`kind` を用いることで自然に型を `lifted` と `unlifted` の形式に分類できるため、`Int# :: #`, `Float# :: #` となる。ただし、 `#` は `unlifted type` を分類するための新しい `kind` である。
+`Haskell` は項を型によって分類するように、`kind` によって型を分類する。例えば<sup>5</sup>、`Bool :: Type`, `Maybe :: Type -> Type`, `Maybe Bool :: Type` などだ。そのため、`kind` を用いることで自然に型を `lifted` と `unlifted` の形式に分類できるため、`Int# :: #`, `Float# :: #` となる。ただし、 `#` は `unlifted type` を分類するための新しい `kind` である。
 
 `unlifted type` では `#` を用いたが、`lifted type` では `Type` を用いる。`laziness` のため、`lifted type` の値はヒープへのポインタによって統一的に表現されなければならない。そのため、`Instantiation Principle` は次のように読み替えることができる。`全ての多相型変数は `Type kind` を持つ。例として、`kind` を明示的に指定した `bTwice` を示す。
 
@@ -173,6 +180,10 @@ bTwice :: forall (a :: Type). Bool -> a -> (a -> a) -> a
 ```
 
 ここで、`Float# :: #` 型をインスタンス化しようとすると、`kind` エラーが発生する。なぜなら、`Type` と `#` は異なる `kind` だからだ。
+
+------
+
+5. `Haskell Report`[9] では任意の型の `kind` を `*` 記号を使って表している。しかし、コミュニティでは新しいスペル `Type` が使われ始めている。これは `GHC 8` で利用可能である。我々は本論文において、`*` の代わりに `Type` を用いる。
 
 ## Sub-kinding
 Haskell はリッチな型言語である。特に興味深いのは、アロー関数 `(->)` が以下の `kind` で `binary type constructor` となる点である。
@@ -213,6 +224,11 @@ instance Monad ((->) env) where
 
 # References
 
+- [9] S. Marlow (editor). Haskell 2010 language report, 2010.
+    - [Haskell 2010 Language Report (pdf)](https://www.haskell.org/definition/haskell2010.pdf)
+    - [Haskell 2010 Language Report (online)](https://www.haskell.org/onlinereport/haskell2010/)
+- [12] S. Peyton Jones and J. Launchbury. Unboxed values as first class citizens. In *FPCA*, volume 523 of *LNCS*, pages 636-666, 1991.
+    - [Unboxed values as first class citizens in a non-strict functional language](https://www.microsoft.com/en-us/research/wp-content/uploads/1991/01/unboxed-values.pdf)
 - [16] S. Weirich, J. Hsu, and R. A. Eisenberg. System FC with explicit kind equality. In *International Conference on Functional Programming*, ICFP '13. ACM, 2013.
     - [System FC with Explicit Kind Equality](http://www.cis.upenn.edu/~justhsu/docs/nokinds.pdf)
     - [System FC with Explicit Kind Equality (Extended Version)](http://repository.brynmawr.edu/cgi/viewcontent.cgi?article=1014&context=compsci_pubs)
