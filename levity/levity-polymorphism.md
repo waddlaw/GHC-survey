@@ -38,11 +38,15 @@ bTwice b x f = case b of True  -> f (f x)
 
 単純で広く利用されている解決策としては、全ての値をヒープに確保されたオブジェクトへのポインタとして表現することである。この手法の欠点は非常に処理が遅い点にある ([2.1章](#21-unboxed-values))。そのため、多くの多相的な言語ではポインタとしての表現ではなく、値自身を表す `unboxed values` の形式をサポートしている。Glasgow Haskell Compiler (GHC) に関して言えば、`Haskell` の最先端の最適化である。GHC は何十年前から unboxed value をサポートしているが、unboxed value とポリモーフィズムの間に避けられない緊張関係が生じている ([3章](#3-unboxed-types-and-polymorphism))。他の言語では異なる手法でこの問題に取り組んでいる ([8章](#8-polymorphism-in-other-languages))。
 
+本論文では、既に普及しているポリモーフィズムにおいてハイパフォーマンスを実現させるための斬新で新しい手法を提案する。以下に概要を示す。
+
+- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章])(#4
 
 
-  - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
 
 
+
+ 
 ------
 
 <a name="note-1">1</a>. 我々が `polomorphism` という用語を用いる場合は全て `parametric polymorphism` の意味である。
