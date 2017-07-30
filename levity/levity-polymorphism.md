@@ -24,6 +24,8 @@
 - [Richard A. Eisenberg - Levity Polymorphism](https://www.youtube.com/watch?v=lSJwXZ7vWBw)
 - [GHC.Types](https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/GHC/Types.hs)
 - [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
+- [9.2.1. Unboxed types](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types)
+- [What are lifted and unlifted product types in Haskell?](https://stackoverflow.com/questions/39985296/what-are-lifted-and-unlifted-product-types-in-haskell)
 
 ## 対訳表
 
@@ -35,15 +37,20 @@
 | boxed type | boxed type|
 | colling convention | 呼出規約 |
 | kind | カインド |
+| lazy | 遅延 |
+| levity | levity |
 | levity polymorphism | levity porimorphism |
+| lifted | lifted |
 | parametric polymorphism | パラメータ多相 |
 | principled type system | 原理化された型システム |
 | polymorphic | 多相的 |
 | polymorphism | ポリモーフィズム |
+| strict | 正格 |
 | sub-typing | サブタイピング |
 | thunk | サンク |
 | unboxed type | unboxed type |
 | unboxed value | unboxed value |
+| unlifted | unlifted |
 
 
 
@@ -55,7 +62,7 @@
 
 # 1. The cost of polymorphism
 
-以下のような `Haskell` の関数を考察する。
+以下のような Haskell の関数を考察する。
 
 ``` haskell
 bTwice :: forall a. Bool -> a -> (a -> a) -> a
@@ -65,7 +72,7 @@ bTwice b x f = case b of True  -> f (f x)
 
 この関数は `a` について多相的 (`polymorphic`) [<sup>1</sup>](#note-1) である。多相的とは、`x` の型に関わらず、 `f` 及び `a` を入れ替えても、同一の関数で動作することを言う。我々が "同じ関数" と言う時は、常に "`bTwice` をコンパイルした同一のコードが、任意の型の引数 `x` に対して動作することを言う"。しかし、`x`の型の呼出規約に影響される。それゆえ、`bTwice` の実行可能コードとなる。例えば、仮に `x` がリストだったとしよう。これは、ヒープを指し示すレジスタに渡される。倍精度浮動小数点数であれば、特別な浮動小数点レジスタに渡されるだろう。すなわち、ポリモーフィズムでは共有コードが衝突する。
 
-単純で広く利用されている解決策としては、全ての値をヒープに確保されたオブジェクトへのポインタとして表現することである。この手法の欠点は非常に処理が遅い点にある ([2.1章](#21-unboxed-values))。そのため、多くの多相的な言語ではポインタとしての表現ではなく、値自身を表す `unboxed values` の形式をサポートしている。Glasgow Haskell Compiler (GHC) に関して言えば、`Haskell` の最先端の最適化である。GHC は何十年前から unboxed value をサポートしているが、unboxed value とポリモーフィズムの間に避けられない緊張関係が生じている ([3章](#3-unboxed-types-and-polymorphism))。他の言語では異なる手法でこの問題に取り組んでいる ([8章](#8-polymorphism-in-other-languages))。
+単純で広く利用されている解決策としては、全ての値をヒープに確保されたオブジェクトへのポインタとして表現することである。この手法の欠点は非常に処理が遅い点にある ([2.1章](#21-unboxed-values))。そのため、多くの多相的な言語ではポインタとしての表現ではなく、値自身を表す `unboxed values` の形式をサポートしている。Glasgow Haskell Compiler (GHC) に関して言えば、Haskell の最先端の最適化である。GHC は何十年前から unboxed value をサポートしているが、unboxed value とポリモーフィズムの間に避けられない緊張関係が生じている ([3章](#3-unboxed-types-and-polymorphism))。他の言語では異なる手法でこの問題に取り組んでいる ([8章](#8-polymorphism-in-other-languages))。
 
 本論文では、既に普及しているポリモーフィズムにおいてハイパフォーマンスを実現させるための斬新で新しい手法を提案する。以下に概要を示す。
 
@@ -129,23 +136,13 @@ plusInt (I# i1) (I# i2) = I# (i1 +# i2)
 
 
 ## 2.2 Boxed vs. unboxed and lifted vs. unlifted
-一般的には、`boxed value` はヒープへのポインタとして表されるが、その一方で `unboxed value` は値自身である。それゆえ、`unboxed value` はサンクになることができず、 `unboxed` 型の引数は必ず値として渡されることとなる。
+一般的に、 boxed value はヒープへのポインタとして表されるが、その一方で unboxed value は値自身である。それゆえ、unboxed value はサンクになることができず、 unboxed 型の引数は必ず値として渡されることとなる。
 
-`Haskell` もまた `levity` を検討する必要がある。これは、`lifted` と `unlifted` の選択を意味する。`lifted type` は `lazy` である。これは、`lifted` だと思われる。なぜなら、`lifted` ヒープに1つ余分な要素が1つあり、これが非決定性計算を表現しているからである。例えば、`Haskell` の `Bool` 型は `lifted` であり、`True`, `False`, `⊥` のうちのどれかである。それに対して `unlifted type` は `strict` である。そのため、`⊥` は `unlifted type` には存在しない。
+Haskell もまた `levity` を検討する必要がある。これは、`lifted` と `unlifted` の選択を意味する。lifted type は遅延である。これは、`lifted` だと思われる。なぜなら、 lifted の場合、ヒープに1つ余分な要素が1つあり、これが非決定性計算を表現しているからである。例えば、 Haskell の `Bool` 型は lifted であり、`True`, `False`, `⊥` のうちのどれかの値となる。それに対して unlifted type は正格である。そのため、`⊥` は unlifted type には存在しない。
 
-なぜなら、 `Haskell` は `lifted type` は `boxed` にならなければならないという制約を、実行時にサンクとすることで、遅延評価を表現しているからである。
+なぜなら、 Haskell は実行時にサンクとして遅延計算を表現しているため、全ての lifted type は boxed でなければならない。しかしながら、これは unlifted type が boxed な場合もある。図1は boxity と lexity の関係性をまとめ、３箇所のスペースに入る可能性がある具体例をいくつか入れたものである。
 
-
-
---------
-
-- [9.2.1. Unboxed types](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types)
-
-> Note: a “boxed” type means that a value is represented by a pointer to a heap object; a “lifted” type means that terms of that type may be bottom.
-
-> a primitive value might be represented by a pointer to a heap-allocated object. Examples include Array#, the type of primitive arrays. Thus, Array# is an unlifted, boxed type. A primitive array is heap-allocated because it is too big a value to fit in a register, and would be too expensive to copy around; in a sense, it is accidental that it is represented by a pointer.
-
-- [What are lifted and unlifted product types in Haskell?](https://stackoverflow.com/questions/39985296/what-are-lifted-and-unlifted-product-types-in-haskell)
+> 図を入れる
 
 ## Unboxed tuples
 
