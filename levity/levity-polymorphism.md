@@ -262,14 +262,14 @@ myError s = error ("Program error  " ++ s)
 
 # References
 
-[<a name="9"9</a>] S. Marlow (editor). Haskell 2010 language report, 2010.
+[<a name="9">9</a>] S. Marlow (editor). Haskell 2010 language report, 2010.
 - [Haskell 2010 Language Report (pdf)](https://www.haskell.org/definition/haskell2010.pdf)
 - [Haskell 2010 Language Report (online)](https://www.haskell.org/onlinereport/haskell2010/)
 
-[<a name="12"12</a>] S. Peyton Jones and J. Launchbury. Unboxed values as first class citizens. In *FPCA*, volume 523 of *LNCS*, pages 636-666, 1991.
+[<a name="12">12</a>] S. Peyton Jones and J. Launchbury. Unboxed values as first class citizens. In *FPCA*, volume 523 of *LNCS*, pages 636-666, 1991.
 - [Unboxed values as first class citizens in a non-strict functional language](https://www.microsoft.com/en-us/research/wp-content/uploads/1991/01/unboxed-values.pdf)
 
-[<a name="16"16</a>] S. Weirich, J. Hsu, and R. A. Eisenberg. System FC with explicit kind equality. In *International Conference on Functional Programming*, ICFP '13. ACM, 2013.
+[<a name="16">16</a>] S. Weirich, J. Hsu, and R. A. Eisenberg. System FC with explicit kind equality. In *International Conference on Functional Programming*, ICFP '13. ACM, 2013.
 - [System FC with Explicit Kind Equality](http://www.cis.upenn.edu/~justhsu/docs/nokinds.pdf)
 - [System FC with Explicit Kind Equality (Extended Version)](http://repository.brynmawr.edu/cgi/viewcontent.cgi?article=1014&context=compsci_pubs)
 
