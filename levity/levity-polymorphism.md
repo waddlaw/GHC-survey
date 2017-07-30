@@ -2,7 +2,7 @@
 
 - [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
 - [NoSubKinds](https://ghc.haskell.org/trac/ghc/wiki/NoSubKinds)
-  - [日本語訳](https://github.com/waddlaw/GHC8.2.1-survey/blob/master/levity/NoSubKinds.md)
+    - [日本語訳](https://github.com/waddlaw/GHC8.2.1-survey/blob/master/levity/NoSubKinds.md)
 - [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 - [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
