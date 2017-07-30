@@ -48,8 +48,7 @@
 | strict | 正格 |
 | sub-typing | サブタイピング |
 | thunk | サンク |
-| unboxed type | unboxed type |
-| unboxed value | unboxed value |
+| unboxed | unboxed |
 | unlifted | unlifted |
 
 
@@ -146,27 +145,27 @@ Haskell もまた `levity` を検討する必要がある。これは、`lifted`
 
 ## Unboxed tuples
 
-`Int#` や `Double#` などの `unboxed primitive tpyes` に加えて、`Haskell` は `unboxed tuples` をサポートしている。通常の `boxed tuple` は `(Int, Bool)` といった型であり、これはヒープに確保されたタプル要素へのポインタのベクターとして表される。よって、`boxed tuple` の全ての要素は `boxed` となる。そのため、`Boxed tuples` は `lazy` であるが、設計としては自由選択で良い。
+`Int#` や `Double#` などの unboxed primitive tpyes に加えて、 Haskell は `unboxed tuples` をサポートしている。通常の boxed tuple は `(Int, Bool)` といった型であり、これはヒープに確保されたタプル要素へのポインタのベクターとして表される。よって、 boxed tuple の全ての要素は boxed となる。そのため、Boxed tuples は遅延であるが、設計としては自由選択で良い。
 
-関数から返ってくる複数の値をサポートするために考えられた既存の方法を使えば、`unboxed tuple` は複数の値同士を結びつけるための、単なる `Haskell` の構文にすぎない。`Unboxed tuples` はどんな場合でも実行時では存在しない。例えば
+関数から返ってくる複数の値をサポートするために考えられた既存の方法を使えば、`unboxed tuple` は複数の値同士を結びつけるための、単なる Haskell の構文にすぎない。Unboxed tuples はどんな場合でも実行時では存在しない。例えば
 
 ```haskell
 divMod :: Int -> Int -> (# Int, Int #)
 ```
 
-`divMod` は2つの整数を返す。`Haskell` プログラマーは `divMod` を以下のように利用することがある
+`divMod` は2つの整数を返す。Haskell プログラマーは `divMod` を以下のように利用することがある
 
 ```haskell
 case divMod n k of (# quot, rem #) -> ...
 ```
 
-`case` を使ってタプルの構成要素を分解する。しかしながら、コンパイルの段階において、`unboxed tuple` は完全に消えてしまっている。`divMod` 関数は分離されたレジスタに保存された2つの値を返すコードにコンパイルされる。`case` 文はそれら2つの値を `quot` と `rem` に単純に束縛するだけのコードにコンパイルされる。これは、タプルのヒープ確保と間接参照を回避できるため、同等の `boxed tuples` バージョンよりも効率的である。
+**case** を使ってタプルの構成要素を分解する。しかしながら、コンパイルの段階において、 unboxed tuple は完全に消えてしまっている。`divMod` 関数は分離されたレジスタに保存された2つの値を返すコードにコンパイルされる。**case** 文はそれら2つの値を `quot` と `rem` に単純に束縛するだけのコードにコンパイルされる。これは、タプルのヒープ確保と間接参照を回避できるため、同等の boxed tuples バージョンよりも効率的である。
 
-`GHC` のモダンバージョンでは、`unboxed tuples` は関数の引数のように用いることを許可している。`(+) :: (# Int, Int #) -> Int` 関数はコンパイルすると `(+) :: Int -> Int -> Int` と全く同じコードを生成する。そのため、`unboxed tuple` は複数のレジスタを経由して複数の引数を受け渡すことを、単に表すために利用される。
+GHC のモダンバージョンでは、 unboxed tuples は関数の引数のように用いることを許可している。`(+) :: (# Int, Int #) -> Int` 関数はコンパイルすると `(+) :: Int -> Int -> Int` と全く同じコードを生成する。そのため、 unboxed tuple は複数のレジスタを経由して複数の引数を受け渡すことを、単に表すために利用される。
 
-`unboxed tuples` の興味深い側面として、本論文の展開として重要な事柄がある。それは、ネスティングは計算上無関係となる事実である。
+unboxed tuples の興味深い側面として、本論文の展開として重要な事柄がある。それは、ネスティングは計算上無関係となる事実である。
 
-```
+```haskell
 (# Int, (# Float#, Bool #) #)
 (# Int, Float#, Bool #)
 ```
