@@ -13,6 +13,7 @@
 
 | Term | 用語 |
 | :---- | :----- |
+| unboxed value | unboxed value |
 | colling convention | 呼出規約 |
 | kind | カインド |
 | polymorphic | 多相的 |
@@ -35,25 +36,12 @@ bTwice b x f = case b of True  -> f (f x)
 
 この関数は `a` について多相的 (`polymorphic`) [<sup>1</sup>](#note-1) である。多相的とは、`x` の型に関わらず、 `f` 及び `a` を入れ替えても、同一の関数で動作することを言う。我々が "同じ関数" と言う時は、常に "`bTwice` をコンパイルした同一のコードが、任意の型の引数 `x` に対して動作することを言う"。しかし、`x`の型の呼出規約 (`colling convention`) に影響される。それゆえ、`bTwice` の実行可能コードとなる。例えば、仮に `x` がリストだったとしよう。これは、ヒープを指し示すレジスタに渡される。倍精度浮動小数点数であれば、特別な浮動小数点レジスタに渡されるだろう。すなわち、ポリモーフィズムでは共有コードが衝突する。
 
-単純で広く利用されている解決策としては、全ての値をヒープに確保されたオブジェクトへのポインタとして表現することである。この手法の欠点は非常に処理が遅い点にある [(2.1章)](#2.1 Unboxed values)
+単純で広く利用されている解決策としては、全ての値をヒープに確保されたオブジェクトへのポインタとして表現することである。この手法の欠点は非常に処理が遅い点にある ([2.1章](#21-unboxed-values))。そのため、多くの多相的な言語ではポインタとしての表現ではなく、値自身を表す `unboxed values` の形式をサポートしている。Glasgow Haskell Compiler (GHC) に関して言えば、`Haskell` の最先端の最適化である。GHC は何十年前から unboxed value をサポートしているが、unboxed value とポリモーフィズムの間に避けられない緊張関係が生じている ([3章](#3-Unboxed-types-and-polymorphism))。他の言語では異なる手法でこの問題に取り組んでいる ([8章](#8-Polymorphism-in-other-languages))。
 
 
 
   - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
-  - [呼出規約 - wikipedia](https://ja.wikipedia.org/wiki/%E5%91%BC%E5%87%BA%E8%A6%8F%E7%B4%84)
 
-
-
-- この手法の問題点は `速度が非常に遅い`。
-
-たいていの `polymorphic language` では `unboxed values` の形式がサポートされている。
-
-- `unboxed value` とは、ポインタとしての表現ではなく、値そのもの
-
-`Levity polymorphism` は `GHC 8.0.1` から実装されている。`Cyclone` という言語も同様のアプローチをとっている。
-
-- [Cyclone is a safe dialect of C.](https://cyclone.thelanguage.org/)
-- [Cyclone - wikipedia](https://en.wikipedia.org/wiki/Cyclone_(programming_language))
 
 ------
 
@@ -278,6 +266,8 @@ myError s = error ("Program error  " ++ s)
 
 # 4. Key idea: polymorphism, not sub-kinding
 
+
+# 8. Polymorphism in other languages
 
 # References
 
