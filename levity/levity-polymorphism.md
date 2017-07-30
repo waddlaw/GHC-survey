@@ -293,10 +293,10 @@ myError s = error ("Program error  " ++ s)
 [<a name="2">2</a>] S. Finne, D. Leijen, E. Meijer, and S. Peyton Jones. Calling Hell from Heaven and Heaven from Hell. In *ACM SIGPLAN International Conference on Functional Programming (ICFP'99)*, pages 114-125, Paris, Sept. 1999. ACM.
 - [Calling hell from heaven and heaven from hell](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/comserve.pdf)
 
-[<a name="3>3</a>] C. Flanagan, A. Sabry, B. F. Duba, and M. Felleisen. The essence of compiling with continuations. In *Proceedings of the ACM SIGPLAN 1993 Conference on Programming Language Design and Implementation*, PLDI '93, pages 237-247. ACM, 1993
+[<a name="3">3</a>] C. Flanagan, A. Sabry, B. F. Duba, and M. Felleisen. The essence of compiling with continuations. In *Proceedings of the ACM SIGPLAN 1993 Conference on Programming Language Design and Implementation*, PLDI '93, pages 237-247. ACM, 1993
 - [The Essence of Compiling with Continuations](https://slang.soe.ucsc.edu/cormac/papers/pldi93.pdf)
 
-[<a name="4>4</a>] J.-Y. Girard. Une extension de l'interpretation de Godel a l'analyse, et son application a l'elimination des coupures dans l'analyse et la theorie des types. In J. Fenstad, editor, *Proceedings of the Second Scandinavian Logic Symposium*, volume 63 of *Studies in Logic and the Foundations of Mathematics*, pages 63-92. Elsevier, 1971.
+[<a name="4">4</a>] J.-Y. Girard. Une extension de l'interpretation de Godel a l'analyse, et son application a l'elimination des coupures dans l'analyse et la theorie des types. In J. Fenstad, editor, *Proceedings of the Second Scandinavian Logic Symposium*, volume 63 of *Studies in Logic and the Foundations of Mathematics*, pages 63-92. Elsevier, 1971.
 
 [<a name="5">5</a>] D. Grossman. Quantified types in an imperative language. *ACM Trans. Program. Lang. Syst.,* 28(3):429-475, May 2006.
 - [Quantified Types in an Imperative Language](https://homes.cs.washington.edu/~djg/papers/qtil.pdf)
