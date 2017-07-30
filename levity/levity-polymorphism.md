@@ -282,6 +282,9 @@ myError s = error ("Program error  " ++ s)
 
 # 8. Polymorphism in other languages
 
+## 8.1 Cyclone
+
+
 # References
 
 [<a name="5">5</a>] D. Grossman. Quantified types in an imperative language. *ACM Trans. Program. Lang. Syst.,* 28(3):429-475, May 2006.
