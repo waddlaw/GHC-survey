@@ -44,7 +44,8 @@ bTwice b x f = case b of True  -> f (f x)
 
 - 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
 - メモリレイアウトと呼出規約の記述方法について原理化した上で、一歩先に進み `levity polymorphism` を採用する。これにより、固定された値か格納されたデータかを表す抽象表現によって、メモリレイアウトの選択が抽象化された (`abstracted`) 関数を許可できる ([5章](#5-taming-levity-polymorphism))。我々が始めて levity polymorphism を記述・実装したと信じている。
-- 。levity-polymorphic function が実際に具体的なコードへコンパイルされることを保証するために、我々の規則が十分であることを形式的に証明する。([6章]())
+- levity polymorphism は巧妙な手法ではなく、本当に厳密であり、受け入れても良いと思ってもらえるだろう。levity-polymorphic function が実際に具体的なコードへコンパイルされることを保証するために、我々の規則が十分であることを形式的に証明する。([6章](#6-correctness-of-levity-polymorphism))
+- 獲得した levity polymorphism には、様々な可能性が秘められている。([7章])() で詳細に議論する。
 
 
 
