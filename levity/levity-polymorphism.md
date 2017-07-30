@@ -13,6 +13,7 @@
 
 | Term | 用語 |
 | :---- | :----- |
+| abstract representation | 抽象表現 |
 | unboxed value | unboxed value |
 | colling convention | 呼出規約 |
 | kind | カインド |
@@ -40,7 +41,16 @@ bTwice b x f = case b of True  -> f (f x)
 
 本論文では、既に普及しているポリモーフィズムにおいてハイパフォーマンスを実現させるための斬新で新しい手法を提案する。以下に概要を示す。
 
-- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章])(#4
+- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
+- メモリレイアウトと呼出規約の記述方法について原理化した上で、一歩先に進み `levity polymorphism` を採用する。これにより、固定された値か格納されたデータかを表す抽象表現によって、メモリレイアウトの選択が抽象化された (`abstracted`) 関数を許可できる。([5章]())
+
+
+
+
+
+- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
+- 型をカインド (kind) で分類することによる、多相的な関数とデータ型のコンパイルに関する原理的な推論方法を提案する ([4章](#4-key-idea-polymorphism-not-sub-kinding))。それぞれのカインドは型のメモリレイアウトについて述べることで、それらの型を多相的に扱う関数の呼出規約を決定する。
+
 
 
 
@@ -270,6 +280,11 @@ myError s = error ("Program error  " ++ s)
 
 # 4. Key idea: polymorphism, not sub-kinding
 
+# 5. Taming levity polymorphism
+
+# 6. Correctness of levity polymorphism
+
+# 7. New opportunities from levity polymorphism
 
 # 8. Polymorphism in other languages
 
