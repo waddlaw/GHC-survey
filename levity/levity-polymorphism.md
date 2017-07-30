@@ -211,3 +211,10 @@ instance Monad ((->) env) where
 
 ## 3.3 Functions that diverge
 
+# References
+
+- [16] S. Weirich, J. Hsu, and R. A. Eisenberg. System FC with explicit kind equality. In *International Conference on Functional Programming*, ICFP '13. ACM, 2013.
+    - [System FC with Explicit Kind Equality](http://www.cis.upenn.edu/~justhsu/docs/nokinds.pdf)
+    - [System FC with Explicit Kind Equality (Extended Version)](http://repository.brynmawr.edu/cgi/viewcontent.cgi?article=1014&context=compsci_pubs)
+- [17] B. A. Yorgey, S. Weirich, J. Cretin, S. Peyton Jones, D. Vytiniotis, and J. P. Magalhaes. Giving Haskell a promotion. In *Types in Language Design and Implementation*, TLDI '12. ACM, 2012.
+    - [Giving Haskell a Promotion](http://www.seas.upenn.edu/~sweirich/papers/tldi12.pdf)
