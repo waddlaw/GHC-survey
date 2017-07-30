@@ -6,6 +6,7 @@
 - [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
 - [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
+- [11 Levity Polymorphism In Dependent Haskell [fixed audio]](https://www.youtube.com/watch?v=bDdkeKr9vVw)
 
 ## 対訳表
 
