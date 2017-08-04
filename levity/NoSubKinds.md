@@ -35,3 +35,29 @@ myError s = error ("Blah" ++ s)
 
 このページの内容は型とカインドがマージされた言語とセマンティクスを想定していることに注意せよ。
 
+# Proposed remedy
+私たちは `Levity` という普通のデータ型を定義した。
+
+```haskell
+data Levity = Lifted | Unlifted
+```
+
+そして、`Levity -> TYPE Lifted` の型となるような、新しいマジカル定数 `TYPE` を生成した。このアイデアは `TYPE Lifted` を古い `*` へ、 `TYPE Unlifted` を古い `#` に置き換えることである。その結果、仮に `* :: *` だった場合、 `TYPE Lifted` を意味するカインドに上手く分類できる。こうして、奇妙な型 `TYPE` が導入された。これで、 `OpenKind` は `forall (l :: Levity). TYPE l` のようにすることができる。特別に実際の型をいくつか示す。
+
+```haskell
+(->) :: forall (l1 :: Levity) (l2 :: Levity). TYPE l1 -> TYPE l2 -> TYPE Lifted
+error :: forall (l :: Levity) (a :: TYPE l). String -> a
+undefined :: forall (l :: Levity) (a :: TYPE l). a
+```
+
+サブカインド物語は完全に上位互換なカインドポリモーフィズムの登場によって終焉を迎えた。ユーザのために以下を定義した。
+
+```haskell
+type * = TYPE Lifted
+type # = TYPE Unlifted
+```
+
+さらに、GHCの既存の `preserve-type-synonyms-wherever-possible` 機構がメッセージを保存することは簡単である。
+
+この提案は `Constraint` / `*` 問題には言及していないことに注意せよ。 -- これは別の問題である。
+
