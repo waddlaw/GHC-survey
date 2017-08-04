@@ -61,3 +61,37 @@ type # = TYPE Unlifted
 
 この提案は `Constraint` / `*` 問題には言及していないことに注意せよ。 -- これは別の問題である。
 
+# Levity polymorphism
+ここで型システムに *levity polymorphism* をサポートしたいという方針となった。これは型システムが `\x -> x :: forall (v :: Levity) (a :: TYPE v). a -> a` のような形式をサポートすることを意味する。しかし、これは非常に馬鹿げた話だった。 -- コード生成器はポインタを扱うのかそうでないかを知る必要がある!そのため、一般的な levity polymorphism は禁止したかった。
+
+しかし、時には限定された levity polymorphism を使いたいときがある。例を示す。
+
+```haskell
+myError :: forall (v :: Levity) (a :: TYPE v). String -> a
+myError s = error ("Me" ++ s)
+```
+
+上記の宣言は受理されるべきであるが、これは完全に levity-polymorhic である。
+
+Simon と Richard は以下のルールによって levity polymorphism が動作するだろうと考えていた。levity polymorphism は以下の条件を満たす場合のみ受け入れることとする。
+
+- ユーザは型シグネチャによって levity polymorphism を特別にリクエストできる
+- Levity-polymorphic 型変数は矢印の右側にのみ出現することができる
+
+1つ目のポイントは, GHC は余計なことはしない。例えば以下のコードはとても良い。
+
+```haskell
+f :: forall (v :: Levity) (a :: *) (b :: TYPE v). (a -> b) -> a -> b
+f g x = g x
+```
+
+しかし、ユーザが型推論を望むのであれば、`an exotic specimen` のようにプロデュースしてはいけない。
+
+2つ目のポイントは levity polymorphism を許可するための正しい方法だと思う。もし、levity-polymorphic 変数が矢印の右側にのみ言及するのであれば、parametricity によって、値の無い変数がどれかわかる。すなわち、関数は分岐しなければならい (または `error` か `undefined` を呼び出す。levity-polymorphic 型変数のための2つのプリミティブな値)。これは実装される前に、より深く考察する価値がある。
+
+実際の実装は簡単であるべきだ。`checkValidType` において、TYPE のパージングをサポートし、levity-polymorphism をチェックする。推論アルゴリズムは変更するべきではなく、levity-polymorphic 型として絶対に推論されず、チェックだけ行われる。この拡張は今後の作業として残っている。
+
+
+
+
+The actual implementation should be easy: add parsing support for TYPE and then check for levity-polymorphism in checkValidType. The inference algorithm should remain unchanged, as a levity-polymorphic type would never be inferred, just checked. This extension is left as future work.
