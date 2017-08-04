@@ -90,8 +90,3 @@ f g x = g x
 2つ目のポイントは levity polymorphism を許可するための正しい方法だと思う。もし、levity-polymorphic 変数が矢印の右側にのみ言及するのであれば、parametricity によって、値の無い変数がどれかわかる。すなわち、関数は分岐しなければならい (または `error` か `undefined` を呼び出す。levity-polymorphic 型変数のための2つのプリミティブな値)。これは実装される前に、より深く考察する価値がある。
 
 実際の実装は簡単であるべきだ。`checkValidType` において、TYPE のパージングをサポートし、levity-polymorphism をチェックする。推論アルゴリズムは変更するべきではなく、levity-polymorphic 型として絶対に推論されず、チェックだけ行われる。この拡張は今後の作業として残っている。
-
-
-
-
-The actual implementation should be easy: add parsing support for TYPE and then check for levity-polymorphism in checkValidType. The inference algorithm should remain unchanged, as a levity-polymorphic type would never be inferred, just checked. This extension is left as future work.
