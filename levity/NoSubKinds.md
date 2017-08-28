@@ -1,12 +1,13 @@
 - [NoSubKinds](https://ghc.haskell.org/trac/ghc/wiki/NoSubKinds)
 
-このページは、`Simon PJ` のアイデアをもとに、 `GHC` の部分カインド付け (sub-kinding) を取り除くための設計に関する計画の記録である。 `Richard E.` はボランティアで実装を手伝った。
+このページは `Simon PJ` のアイデアをもとに `GHC` の部分カインド付け (sub-kinding) を除去するための一連の記録である。
+`Richard E.` はボランティアで実装を手伝った。
 
-注意: このページの事柄は既に実装済みである。実際に何が起きたのか、ページの上から下に時系列順となっている。
+注意: このページの内容は既に実装済みであり、実際に起こった事をページの上から下に時系列順で記述した。
 
 # The current story
 
-今現在、様々な**基本**カインド ("base" kinds) が存在する。
+現在、様々な **基本** カインド ("base" kinds) が存在する。
 
 - `*`: lifted boxed types のカインド。これは、`*` カインドを持つ型がボトム (bottom) を含み、ポインタによって表現される。
 - `#`: unlifted types のカインド。このカインドを持つ型はボトムにはなれない。`Int#` や `Double#` などの、多くの unlifted type は unboxed であるが、 `Array#` のように boxed (ヒープポインタで表現される) な場合もある。
