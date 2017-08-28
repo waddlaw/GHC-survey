@@ -21,10 +21,12 @@ unboxed value | unboxed type
 #!/usr/bin/env stack
 -- stack --resolver lts-9.2 --install-ghc runghc
 {-# LANGUAGE MagicHash #-}
-import GHC.Prim
+import GHC.Prim ((+#))
+import GHC.Types (Int(I#))
+import GHC.CString (unpackCString#)
 
 main = do
-  putStrLn $ show $ I# $ 1# +# 5#
+  putStrLn $ show $ I# (1# +# 5#)
   putStrLn $ show $ unpackCString# "foo"#
 ```
 
