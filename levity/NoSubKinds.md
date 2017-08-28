@@ -93,7 +93,7 @@ f g x = g x
 
 ## Issues from Dimitrios
 
-4月15日: Richard の実装に対して、以下の issue が全て提案された。
+**Apr 15**: Richard の実装に対して、以下の issue が全て提案された。
 
 - 私たちは、どんな型が OK か Lint チェックする必要がある。つまり、FC プログラムは正しく型付けされる。
 - 判断の基準の提案: `(ty:TYPE l)` は **矢印の左側には出現できない。** また `(ty:TYPE l)` は **任意の束縛の型の中には出現しない** 。そのため、コンストラクタのフィールドには出現できない。なぜなら、コンストラクタの型が正しく型付けされないため。
@@ -166,7 +166,61 @@ foo _ = g (# error "a", error "b" #)
 - forall の本体は、ある levity `l` となる `Type l` カインドとなるべきであり、それが forall のカインドとなる。これは、本体がカインド `* -> *` とならないことを意味し、間違いなく `k` ではない。これは、正しく無いカインド `forall k (a::k). a` となる。 (Cf [#10114](https://ghc.haskell.org/trac/ghc/ticket/10114))
 
 
+# Implementation
+
+**Feb 24, 2016**
+
+この一般化されたアイデアはバージョン 8.0 に実装されたが、少し工夫した点があり、そこから全てが始まった。
+
+```haskell
+type family F a where
+  F Int# = Int
+```
+
+とてもわかりやすい。
+型族を使えば unlifted type を上手く処理できた。
+
+しかし、これは？
+
+```haskell
+type family G a :: k where
+  G Int = Int#
+  G Bool = Int
+
+foo :: G a -> ...
+```
+
+`G a` のカインドは `TYPE r` となるはずだが、それは `foo` の引数のサイズがわからないことを意味する。つまり大失敗だ。
+仮に `k` が `#` とわかっていたとしても、まだこの問題は解決しない。なぜなら、unboxed 型によって多数の異なるサイズがあるからだ。
+
+そのため、こうした。
+
+```haskell
+data RuntimeRep = PtrRepLifted | PtrRepUnlifted | IntRep | VoidRep | ...
+TYPE :: RuntimeRep -> *
+type * = TYPE 'PtrRepLifted
+```
+
+これは、上述のアイデアと似ているが levity の代わりに `RuntimeRep` を利用している。
+現在は、型のカインドから常に値のサイズがわかるようになった。
+実際の定義は `GHC.Types` にある。
+
+我々は今のところ、全ての束縛された変数が固定したサイズを持つことを保証しなければならない。
+これは大抵何もしなくて良い。なぜなら constraint-solving が `RuntimeRep` に通知できるからである。
+束縛が終わったら、サイズがわかっているかどうかをチェックし、問題があればエラーにする。
 
 
+## Alternative RuntimeRep choice
+上記の `RuntimeRep` は以下のようにすることもできる:
 
+```haskell
+data RuntimeRep = PtrRep Levity | VoidRep | IntRep | ...
+data Levity = Lifted | Unlifted
+```
 
+現在、levity を与えることなく、確かな型を boxed だと言うことができる。
+これはとても良い。なぜなら boxed unlifted のポリモーフィズムが賢明だと思う。
+これは、boxed と unboxed の両方になるような (恐怖となる) ものを防ぐために、より制限した型を `unsafeCoerce#` に与えることができる。
+(仮にこれを行うと、本当に制限されていない `reallyUnsafeCoerce#` や `unsafeCoerce##` のようなものを導入するでしょう。)
+しかしながら、これは多レイヤアプローチが体感できるほどのパフォーマンスに影響を与えます (プログラムごとに影響度は違う)。なぜなら、`*` を剥がす時にポインタを捕まえる必要があるため。
+unpacked sum を使う時、これを再検討する。なぜなら、理論的な観点から見ればこの代替案はより良いからだ。
