@@ -19,7 +19,7 @@ unboxed value | unboxed type
 
 ```haskell
 #!/usr/bin/env stack
--- stack --resolver lts-9.2 --install-ghc runghc
+-- stack --resolver lts-9.2 --install-ghc exec ghci
 {-# LANGUAGE MagicHash #-}
 import GHC.Prim ((+#))
 import GHC.Types (Int(I#))
@@ -29,6 +29,19 @@ main = do
   putStrLn $ show $ I# (1# +# 5#)
   putStrLn $ show $ unpackCString# "foo"#
 ```
+
+```bash
+$ stack MagicHash.hs
+GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
+[1 of 1] Compiling Main             ( MagicHash.hs, interpreted )
+Ok, modules loaded: Main.
+*Main> main
+6
+"foo"
+```
+
+## 参考
+- [Primitive Haskell](https://www.fpcomplete.com/blog/2015/02/primitive-haskell)
 
 
 # (un)lifted type と (un)boxed type
