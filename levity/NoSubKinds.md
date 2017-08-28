@@ -61,7 +61,7 @@ type # = TYPE Unlifted
 
 この提案は `Constraint` / `*` 問題には言及していないことに注意せよ。 -- これは別の問題である。
 
-# Levity polymorphism
+## Levity polymorphism
 ここで型システムに *levity polymorphism* をサポートしたいという方針となった。これは型システムが `\x -> x :: forall (v :: Levity) (a :: TYPE v). a -> a` のような形式をサポートすることを意味する。しかし、これは非常に馬鹿げた話だった。 -- コード生成器はポインタを扱うのかそうでないかを知る必要がある!そのため、一般的な levity polymorphism は禁止したかった。
 
 しかし、時には限定された levity polymorphism を使いたいときがある。例を示す。
@@ -90,3 +90,83 @@ f g x = g x
 2つ目のポイントは levity polymorphism を許可するための正しい方法だと思う。もし、levity-polymorphic 変数が矢印の右側にのみ言及するのであれば、parametricity によって、値の無い変数がどれかわかる。すなわち、関数は分岐しなければならい (または `error` か `undefined` を呼び出す。levity-polymorphic 型変数のための2つのプリミティブな値)。これは実装される前に、より深く考察する価値がある。
 
 実際の実装は簡単であるべきだ。`checkValidType` において、TYPE のパージングをサポートし、levity-polymorphism をチェックする。推論アルゴリズムは変更するべきではなく、levity-polymorphic 型として絶対に推論されず、チェックだけ行われる。この拡張は今後の作業として残っている。
+
+## Issues from Dimitrios
+
+4月15日: Richard の実装に対して、以下の issue が全て提案された。
+
+- 私たちは、どんな型が OK か Lint チェックする必要がある。つまり、FC プログラムは正しく型付けされる。
+- 判断の基準の提案: `(ty:TYPE l)` は **矢印の左側には出現できない。** また `(ty:TYPE l)` は **任意の束縛の型の中には出現しない** 。そのため、コンストラクタのフィールドには出現できない。なぜなら、コンストラクタの型が正しく型付けされないため。
+- `(Int -> (ty:TYPE l)) -> Int` は OK
+- `((ty:TYPE l) -> Int) -> Int` は NG
+- `data T l (a:TYPE l) = MkT (Int -> a)` は OK
+- なので `MkT Unlifted Int# (\n -> error Unlifted Int# "urk")` は OK
+- さらに `undefined` のトップレベル定義も OK。なぜなら、`undefined :: forall v. forall (a:TYPE v). a` となるため。
+
+You make it sound as if the only problem is defaulting. But I do not think it is enough. For instance, what prevents a user from writing:
+唯一の問題は defaulting の問題だけだと思うかもしれないが、私はそれだけではないと思う。
+例えば、ユーザが以下のように記述してしまうことを防ぐためにはどうしたら良いだろう。
+
+```haskell
+f :: forall v. forall (a :: TYPE v). a -> a 
+f x = x
+```
+
+この問題に対するもっともらしい唯一の説明は、TYPE と levity はプログラマに公開されないのでそんなコードは書けないということである。
+\*しかし\* TYPE と levity をプログラマに公開しなければならないときにこの問題は顕在化する。
+例えば "error" のイータ拡張のためにシグネチャを与えなければならない場合である。
+例: 
+
+```haskell
+g :: forall (a:*). forall v. forall (b :: TYPE v). Show a => a -> b
+g x = error (show x) 
+```
+
+このように、"GHCで問題になるのは defaulting だけだ" という主張は本来抱えている問題の一部分にすぎない。
+どのようにして、悪い "f" を防ぎ、良い "g" を許可するのだろうか？
+
+現在、私は defaulting が解決策の一部であることは認めるが、それが矢印の左側で levity の抽象化が行われないことを本当に保証できるのだろうか？
+例えば、仮に以下のように (->) が型付けされたとしよう:
+
+```haskell
+(->) :: forall v1,v2, FIXED v1 => TYPE v1 -> TYPE v2 -> *
+```
+
+ここで `FIXED v1` はカインド推論によって決まるカインドクラス制約から導出されるようなもの (しかし、もちろんそれと関連付けられた証拠は存在しない) であり、一般化された levity 変数を防ぐ。
+そのため、型推論は次のようになる:
+
+```haskell
+FIXED Lifted   => is just discharged successfully
+FIXED Unlifted => is just discharged successfully
+```
+
+しかし、型推論の最後に次の形式の制約が残されている:
+
+```haskell
+FIXED levity_unification_variable  ==> can be defaulted to Lifted
+                                               (this will allow us to infer sound types)
+FIXED levity_skolem_variable       ==> are genuine errors! 
+```
+
+私は `FIXED` カインドクラスのようなカインド制約を生成することが難しいとは思わないし、defaulting の特別なものとして扱えるのだが、どうだろうか？
+実際のところ、もしかすると、カインド等価性の完全な動作に頼らない形で \*今日の\* GHC に導入したいのではないかと推測している。
+
+面白い例を示す。
+
+```haskell
+g :: (forall a. (# a, a #)) -> (# Int, Int #)
+{-# NOINLINE g #-}
+g x = x
+
+foo _ = g (# error "a", error "b" #)
+```
+
+結論:
+- `forall (l:Levity). ty` はカインド `*` である。我々はそれを値抽象パイとして考える。`undefined :: forall l. forall (a:Type l). a` の全体の型のカインドは `*` であり、 lifted である。
+- forall の本体は、ある levity `l` となる `Type l` カインドとなるべきであり、それが forall のカインドとなる。これは、本体がカインド `* -> *` とならないことを意味し、間違いなく `k` ではない。これは、正しく無いカインド `forall k (a::k). a` となる。 (Cf [#10114](https://ghc.haskell.org/trac/ghc/ticket/10114))
+
+
+
+
+
+
