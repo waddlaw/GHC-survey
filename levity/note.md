@@ -268,3 +268,18 @@ False
 liftIO $ print $ eqType k1 k2 -- True
 liftIO $ print $ tcEqType k1 k2 -- False
 ```
+
+### OpenKind の必要性
+- `(->)`　にカインドを与えるために必要。
+
+```haskell
+(->) :: * -> * -> *
+(->) :: # -> # -> *
+
+-- 両方を扱うために
+(->) :: OpenKind -> OpenKind -> *
+```
+
+そのため、 `(->)` は引数が全て満たされた状態でしか適用してはいけないという特別なカインド規則があった。
+
+
