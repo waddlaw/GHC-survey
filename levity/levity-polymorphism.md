@@ -1,6 +1,7 @@
 # Levity Polymorphism (extended version)
 
-- [paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/levity-1.pdf)
+- [Levity Polymorphism](http://repository.brynmawr.edu/cgi/viewcontent.cgi?article=1065&context=compsci_pubs)
+- [Levity Polymorphism (extended version)](http://cs.brynmawr.edu/~rae/papers/2017/levity/levity.pdf)
 
 ## GHC Developers Trac
 ### wiki
