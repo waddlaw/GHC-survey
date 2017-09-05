@@ -282,4 +282,24 @@ liftIO $ print $ tcEqType k1 k2 -- False
 
 そのため、 `(->)` は引数が全て満たされた状態でしか適用してはいけないという特別なカインド規則があった。
 
+- `error` と `undefined` に型を与えるため
 
+```haskell
+error     :: forall (a :: OpenKind). String -> a
+undefined :: forall (a :: OpenKind). a)
+
+-- こういう形を両方とも受け入れたい
+error Int# "foo" :: Int#
+error Int "foo" :: Int
+
+undefined :: Int#
+undefined :: Int
+```
+
+- 推論時にラムダに束縛された変数にカインドを与えるため
+
+```haskell
+\x -> 3# +# x
+```
+
+この時まだ `x` の型が lifted なのか unlifted なのかわからないため `OpenKind` を使う。
