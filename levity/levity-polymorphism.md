@@ -23,6 +23,7 @@
 - [CoreSyn](https://github.com/ghc/ghc/blob/master/compiler/coreSyn/CoreSyn.hs)
 - [Type](https://github.com/ghc/ghc/blob/master/compiler/types/Type.hs)
 - [Kind](https://github.com/ghc/ghc/blob/master/compiler/types/Kind.hs)
+- [TcType](https://github.com/ghc/ghc/blob/master/compiler/typecheck/TcType.hs)
 
 ## その他
 - [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
