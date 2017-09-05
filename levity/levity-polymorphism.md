@@ -21,6 +21,8 @@
 ## GHC Code
 - [GHC.Types](https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/GHC/Types.hs)
 - [CoreSyn](https://github.com/ghc/ghc/blob/master/compiler/coreSyn/CoreSyn.hs)
+- [Type](https://github.com/ghc/ghc/blob/master/compiler/types/Type.hs)
+- [Kind](https://github.com/ghc/ghc/blob/master/compiler/types/Kind.hs)
 
 ## その他
 - [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
