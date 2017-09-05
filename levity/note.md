@@ -264,7 +264,7 @@ False
 
 この結果のうち以下の２行を見れば、動作の違いが明確にわかる。
 
-```
+```haskell
 liftIO $ print $ eqType k1 k2 -- True
 liftIO $ print $ tcEqType k1 k2 -- False
 ```
