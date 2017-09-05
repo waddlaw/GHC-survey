@@ -21,7 +21,9 @@
 ## その他
 - [What is Levity polymorphism](https://stackoverflow.com/questions/35318562/what-is-levity-polymorphism/35320729#35320729)
 - [Richard Eisenberg - Levity Polymorphism (HiW)](http://ezyang.tumblr.com/post/127984263867/richard-eisenberg-levity-polymorphism-hiw)
-- [11 Levity Polymorphism In Dependent Haskell [fixed audio]](https://www.youtube.com/watch?v=bDdkeKr9vVw)
+- Levity Polymorphism in Dependent Haskell. Presented at Haskell Implementors' Workshop
+    - [slide](http://cs.brynmawr.edu/~rae/talks/2015/hiw-levity-polymorphism.pdf)
+    - [youtube](https://www.youtube.com/watch?v=bDdkeKr9vVw)
 - [Richard A. Eisenberg - Levity Polymorphism](https://www.youtube.com/watch?v=lSJwXZ7vWBw)
 - [GHC.Types](https://github.com/ghc/ghc/blob/master/libraries/ghc-prim/GHC/Types.hs)
 - [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
