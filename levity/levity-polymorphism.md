@@ -27,6 +27,7 @@
 - [9.2. Unboxed types and primitive operations](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types-and-primitive-operations)
 - [9.2.1. Unboxed types](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#unboxed-types)
 - [What are lifted and unlifted product types in Haskell?](https://stackoverflow.com/questions/39985296/what-are-lifted-and-unlifted-product-types-in-haskell)
+- [Richard A. Eisenberg](http://cs.brynmawr.edu/~rae/index.html)
 
 ## 対訳表
 
