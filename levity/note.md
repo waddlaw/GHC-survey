@@ -18,8 +18,7 @@ unboxed value | unboxed type
 あんまり意味ないけど、こんな感じで使うことができる。
 
 ```haskell
-#!/usr/bin/env stack
--- stack --resolver lts-9.2 --install-ghc exec ghci
+-- MagicHash.hs
 {-# LANGUAGE MagicHash #-}
 import GHC.Prim ((+#))
 import GHC.Types (Int(I#))
@@ -31,11 +30,8 @@ main = do
 ```
 
 ```bash
-$ stack MagicHash.hs
-GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
-[1 of 1] Compiling Main             ( MagicHash.hs, interpreted )
-Ok, modules loaded: Main.
-*Main> main
+$ stack script MagicHash.hs --resolver lts-9.3
+Using resolver: lts-9.3 specified on command line
 6
 "foo"
 ```
