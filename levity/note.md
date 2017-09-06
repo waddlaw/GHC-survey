@@ -163,7 +163,7 @@ TestKind.hs:5:6: error:
 
 # 最初のカインド
 
-基本カインド | 意味
+カインド | 意味
 :-------:|---------
 \* | lifted boxed types
 \# | unlifted types (unlifted boxed type, unlifted unboxed type)
@@ -522,7 +522,7 @@ CallStack (from HasCallStack):
 
 # remedy 後のカインド
 
-基本カインド | 意味 | 備考
+カインド | 意味 | 備考
 :-------:|---------|-----
 \* | lifted type | 互換性のために定義されている `type * = TYPE 'LiftedRep`
 Type | lifted type | `type Type = TYPE 'LiftedRep`
