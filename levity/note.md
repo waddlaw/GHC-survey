@@ -56,6 +56,7 @@ $ stack repl --resolver ghc-X.Y.Z --ghci-options "-XPolyKinds -fprint-explicit-k
 ```haskell
 data T a = MkT
 ```
+
 #### GHC-7.10.3
 GHC-7.10.3 | :type MkT | :kind T | :info T
 :------|-------|--------|------
@@ -79,6 +80,33 @@ GHC-8.2.1 | :type MkT | :kind T | :info T
 PolyKinds | MkT :: forall k (a :: k). T a | T :: k -> * | type role T phantom <br>　data T (a :: k) = MkT
 PolyKinds <br> print-explicit-kinds | MkT :: forall k (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T k (a :: k) = MkT
 PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | MkT :: forall k (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T k (a :: k) = MkT
+
+### 関数に対する動作
+
+#### GHC-7.10.3
+GHC-7.10.3 | :type ($) | :info ($)
+:------|-------|--------
+オプション無し | (a -> b) -> a -> b | (a -> b) -> a -> b
+PolyKinds | (a -> b) -> a -> b | (a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | (a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | - | - | -
+
+#### GHC-8.0.2
+GHC-8.0.2 | :type ($) | :info ($)
+:------|-------|--------
+オプション無し | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+
+#### GHC-8.2.1
+GHC-8.2.1 | :type ($) | :info ($)
+:------|-------|--------
+オプション無し | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+
 
 
 # (un)lifted type と (un)boxed type
