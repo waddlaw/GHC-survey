@@ -161,10 +161,7 @@ TestKind.hs:5:6: error:
 
 よって、カインド推論 → 型推論の順で行われる。
 
-
-# カインドの種類
-
-## 最初
+# 最初のカインド
 
 基本カインド | 意味
 :-------:|---------
@@ -174,7 +171,7 @@ Constraint | 型クラス制約
 OpenKind | `*` と `#` のスーパーカインド
 Box | カインドのための型。`* :: BOX`, `# :: BOX`, `BOX :: BOX`
 
-### \* と Constraint
+## \* と Constraint
 
 ```haskell
 -- RejectConstraint.hs
@@ -199,7 +196,7 @@ Using resolver: ghc-8.2.1 specified on command line
 
 しかし、`Core` では両者は同じものとして扱われる。
 
-#### `Core` 
+### `Core` 
 
 ```haskell
 data Expr b
@@ -235,7 +232,7 @@ h :: (Eq a, Eq b) => a -> a -> b -> b -> Bool
 h a1 a2 b1 b2 = a1 == a2 && b1 == b2
 ```
 
-#### GHC 7.10.3
+### GHC 7.10.3
 
 ```bash
 $ stack repl AcceptConstraint.hs --resolver ghc-7.10.3 --ghc-options -ddump-simpl
@@ -256,7 +253,7 @@ h = \ (@ a) (@ b)
       (b1 :: b) (b2 :: b) -> && (== @ a $dEq a1 a2) (== @ b $dEq1 b1 b2)
 ```
 
-#### GHC 8.0.2
+### GHC 8.0.2
 
 ```bash
 $ stack repl AcceptConstraint.hs --resolver ghc-8.0.2 --ghc-options -ddump-simpl
@@ -279,7 +276,7 @@ h = \ (@ a) (@ b)
       (a1 :: a) (a2 :: a) (b1 :: b) (b2 :: b) -> && (== @ a $dEq a1 a2) (== @ b $dEq1 b1 b2)
 ```
 
-#### GHC 8.2.1
+### GHC 8.2.1
 
 ```bash
 $ stack repl AcceptConstraint.hs --resolver ghc-8.2.1 --ghc-options -ddump-simpl
@@ -305,7 +302,7 @@ h = \ (@ a) (@ b)
 
 ```
 
-### tcEqType と eqType
+## tcEqType と eqType
 
 動作の違いを確認するために以下のコードを実行する。
 `tcEqType` はカインドが違えば異なるものとして扱うが、`eqType` はカインドが違っていても同じものとして扱う。
@@ -364,7 +361,7 @@ liftIO $ print $ eqType k1 k2 -- True
 liftIO $ print $ tcEqType k1 k2 -- False
 ```
 
-### OpenKind の必要性
+## OpenKind の必要性
 - `(->)`　にカインドを与えるために必要。
 
 ```haskell
@@ -399,7 +396,7 @@ undefined :: Int
 
 この時まだ `x` の型が lifted なのか unlifted なのかわからないため `OpenKind` を使う。
 
-### OpenKind の問題点
+## OpenKind の問題点
 
 `OpenKind` では `myError s = error ("Blah" ++ s)` のような関数を `Int` と `Int#` の両方に対して動作するようなカインド多相関数として定義することはできない。
 
@@ -522,3 +519,13 @@ OpenKindProblem.hs: Error: x < y
 CallStack (from HasCallStack):
   error, called at /home/bm12/repo/GHC8.2.1-survey/levity/code/OpenKindProblem.hs:19:13 in main:Main
 ```
+
+# remedy 後のカインド
+
+基本カインド | 意味 | 備考
+:-------:|---------|-----
+\* | lifted type | 互換性のために定義されている `type * = TYPE 'LiftedRep`
+Type | lifted type | `type Type = TYPE 'LiftedRep`
+Constraint | 型クラス制約 | 
+TYPE RuntimeRep | lifted type, unlifted type | RumtimeRep によってカインドが決まる
+
