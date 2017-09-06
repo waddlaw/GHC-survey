@@ -403,6 +403,50 @@ undefined :: Int
 
 `OpenKind` では `myError s = error ("Blah" ++ s)` のような関数を `Int` と `Int#` の両方に対して動作するようなカインド多相関数として定義することはできない。
 
+```haskell
+{-# LANGUAGE MagicHash, ExplicitForAll, PolyKinds #-}
+
+import GHC.Prim (Int#, (+#))
+import GHC.Types (Int(I#))
+
+liftedFunc :: Int -> Int -> Int
+liftedFunc x y
+  | x < y = x + y
+  | otherwise = myError "x < y"
+
+unliftedFunc :: Int# -> Int# -> Int#
+unliftedFunc x y
+  | (I# x) < (I# y) = x +# y
+  | otherwise = myError "x < y"
+
+myError s = error ("Error: " ++ s)
+
+main :: IO ()
+main = do
+  print $ liftedFunc 1 2
+  print $ I# (unliftedFunc 1# 2#)
+  print $ I# (unliftedFunc 2# 1#) -- error
+  print $ liftedFunc 2 1 -- error
+```
+
+実行結果
+
+```bash
+$ stack script OpenKindProblem2.hs --resolver ghc-7.10.3
+Using resolver: ghc-7.10.3 specified on command line
+
+/home/bm12/repo/GHC8.2.1-survey/levity/code/OpenKindProblem2.hs:14:17:
+    Couldn't match kind ‘*’ with ‘#’
+    When matching types
+      t0 :: *
+      Int# :: #
+    In the expression: myError "x < y"
+    In an equation for ‘unliftedFunc’:
+        unliftedFunc x y
+          | (I# x) < (I# y) = x +# y
+          | otherwise = myError "x < y"
+```
+
 `GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義可能。
 
 ```haskell
