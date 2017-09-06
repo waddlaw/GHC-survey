@@ -172,6 +172,7 @@ TestKind.hs:5:6: error:
 \# | unlifted types (unlifted boxed type, unlifted unboxed type)
 Constraint | 型クラス制約
 OpenKind | `*` と `#` のスーパーカインド
+Box | カインドのための型。`* :: BOX`, `# :: BOX`, `BOX :: BOX`
 
 ### \* と Constraint
 
