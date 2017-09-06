@@ -13,6 +13,7 @@ unliftedFunc x y
   | (I# x) < (I# y) = x +# y
   | otherwise = myError "x < y"
 
+myError :: String -> a
 myError s = error ("Error: " ++ s)
 
 unliftedValue :: Int#
