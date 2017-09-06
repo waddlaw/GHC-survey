@@ -1,9 +1,13 @@
-# 言語拡張
-言語拡張 | できること
------- | -----
-[MagicHash](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#the-magic-hash) | `'x'#`, `3#` などの形式で unboxed value が扱える
+# 言語拡張とGHCオプション
+言語拡張 | できること | GHC
+------ | ----- | -------
+[MagicHash](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#the-magic-hash) | `'x'#`, `3#` などの形式で unboxed value が扱える | 6.8.1
+[PolyKinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XPolyKinds) | カインドポリモーフィック型を許可する | 7.4.1
+[TypeInType](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XTypeInType) | カインド変数を扱える | 8.0.1
+[print-explicit-kinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-kinds) | カインドを表示する | 7.8.1
+[print-explicit-runtime-reps](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-runtime-reps) | RuntimeRep を表示する | 8.0.1
 
-# MagicHash
+## MagicHash
 この拡張を有効にすると `x#y = 0` は `x#` という関数が引数 `y` を受け取り `0` を返すという意味になるので注意。
 
 unboxed value | unboxed type
@@ -36,8 +40,68 @@ Using resolver: ghc-8.2.1 specified on command line
 "foo"
 ```
 
-## 参考
+### 参考
 - [Primitive Haskell](https://www.fpcomplete.com/blog/2015/02/primitive-haskell)
+
+## PolyKinds
+
+```bash
+$ stack repl --resolver ghc-X.Y.Z
+$ stack repl --resolver ghc-X.Y.Z --ghci-options "-XPolyKinds"
+$ stack repl --resolver ghc-X.Y.Z --ghci-options "-XPolyKinds -fprint-explicit-kinds"
+$ stack repl --resolver ghc-X.Y.Z --ghci-options "-XPolyKinds -fprint-explicit-kinds -fprint-explicit-runtime-reps"
+```
+
+### データ型に対する動作
+
+```haskell
+data T a = MkT
+```
+
+GHC-7.10.3 | :type MkT | :kind T | :info T
+:------|-------|--------|------
+オプション無し | MkT :: T a | T :: * -> * | type role T phantom <br>　data T a = MkT
+PolyKinds | MkT :: forall (k :: BOX) (a :: k). T a | T :: k -> * | type role T phantom <br>　data T (a :: k) = MkT
+PolyKinds <br> print-explicit-kinds | MkT :: forall (k :: BOX) (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T (k :: BOX) (a :: k) = MkT
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | - | - | -
+
+GHC-8.0.2 | :type MkT | :kind T | :info T
+:------|-------|--------|------
+オプション無し | MkT :: T a | T :: * -> * | type role T phantom <br>　data T a = MkT
+PolyKinds | MkT :: forall k (a :: k). T a | T :: k -> * | type role T phantom <br>　data T (a :: k) = MkT
+PolyKinds <br> print-explicit-kinds | MkT :: forall k (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T k (a :: k) = MkT
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | MkT :: forall k (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T k (a :: k) = MkT
+
+GHC-8.2.1 | :type MkT | :kind T | :info T
+:------|-------|--------|------
+オプション無し | MkT :: T a | T :: * -> * | type role T phantom <br>　data T a = MkT
+PolyKinds | MkT :: forall k (a :: k). T a | T :: k -> * | type role T phantom <br>　data T (a :: k) = MkT
+PolyKinds <br> print-explicit-kinds | MkT :: forall k (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T k (a :: k) = MkT
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | MkT :: forall k (a :: k). T k a | T :: k -> * | type role T nominal phantom <br>　data T k (a :: k) = MkT
+
+### 関数に対する動作
+
+GHC-7.10.3 | :type ($) | :info ($)
+:------|-------|--------
+オプション無し | (a -> b) -> a -> b | (a -> b) -> a -> b
+PolyKinds | (a -> b) -> a -> b | (a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | (a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | - | - | -
+
+GHC-8.0.2 | :type ($) | :info ($)
+:------|-------|--------
+オプション無し | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+
+GHC-8.2.1 | :type ($) | :info ($)
+:------|-------|--------
+オプション無し | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
+
 
 
 # (un)lifted type と (un)boxed type
@@ -68,6 +132,36 @@ data Double# = ...
 
 - [GHC-Types](https://www.stackage.org/haddock/lts-9.2/ghc-prim-0.5.0.0/GHC-Types.html)
 
+# カインドと型の推論順序
+
+- [About kind system of Haskell (Part 1)](https://haskell.jp/blog/posts/2017/10-about-kind-system-part1.html) の内容をコピペ
+
+```haskell
+-- TestKind.hs
+
+module TestKind where
+
+f :: Maybe -> Int
+f _ = 0
+
+g :: Int -> Bool
+g '0' = True
+g _   = False
+```
+```bash
+$ stack ghc -- -Wall TestKind.hs
+[1 of 1] Compiling TestKind         ( TestKind.hs, TestKind.o )
+
+TestKind.hs:5:6: error:
+    • Expecting one more argument to ‘Maybe’
+      Expected a type, but ‘Maybe’ has kind ‘* -> *’
+    • In the type signature:
+        f :: Maybe -> Int
+```
+
+よって、カインド推論 → 型推論の順で行われる。
+
+
 # カインドの種類
 
 ## 最初
@@ -78,6 +172,7 @@ data Double# = ...
 \# | unlifted types (unlifted boxed type, unlifted unboxed type)
 Constraint | 型クラス制約
 OpenKind | `*` と `#` のスーパーカインド
+Box | カインドのための型。`* :: BOX`, `# :: BOX`, `BOX :: BOX`
 
 ### \* と Constraint
 
@@ -303,3 +398,58 @@ undefined :: Int
 ```
 
 この時まだ `x` の型が lifted なのか unlifted なのかわからないため `OpenKind` を使う。
+
+### OpenKind の問題点
+
+`OpenKind` では `myError s = error ("Blah" ++ s)` のような関数を `Int` と `Int#` の両方に対して動作するようなカインド多相関数として定義することはできない。
+
+`GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義可能。
+
+```haskell
+-- OpenKindProblem.hs
+{-# LANGUAGE MagicHash, ExplicitForAll, PolyKinds, TypeInType #-}
+
+import GHC.Prim (Int#, (+#), TYPE)
+import GHC.Types (Int(I#), RuntimeRep)
+
+liftedFunc :: Int -> Int -> Int
+liftedFunc x y
+  | x < y = x + y
+  | otherwise = myError "x < y"
+
+unliftedFunc :: Int# -> Int# -> Int#
+unliftedFunc x y
+  | (I# x) < (I# y) = x +# y
+  | otherwise = myError "x < y"
+
+myError
+  :: forall (l :: RuntimeRep) (a :: TYPE l).
+     String -> a
+myError s = error ("Error: " ++ s)
+
+main :: IO ()
+main = do
+  print $ liftedFunc 1 2
+  print $ I# (unliftedFunc 1# 2#)
+  print $ I# (unliftedFunc 2# 1#) -- error
+  print $ liftedFunc 2 1 -- error
+```
+
+実行結果
+```bash
+$ stack script OpenKindProblem.hs --resolver ghc-8.2.1
+Using resolver: ghc-8.0.2 specified on command line
+3
+3
+OpenKindProblem.hs: Error: x < y
+CallStack (from HasCallStack):
+  error, called at /home/bm12/repo/GHC8.2.1-survey/levity/code/OpenKindProblem.hs:19:13 in main:Main
+  
+$ stack script OpenKindProblem.hs --resolver ghc-8.0.2
+Using resolver: ghc-8.0.2 specified on command line
+3
+3
+OpenKindProblem.hs: Error: x < y
+CallStack (from HasCallStack):
+  error, called at /home/bm12/repo/GHC8.2.1-survey/levity/code/OpenKindProblem.hs:19:13 in main:Main
+```
