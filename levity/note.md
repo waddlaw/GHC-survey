@@ -447,20 +447,31 @@ Using resolver: ghc-7.10.3 specified on command line
           | otherwise = myError "x < y"
 ```
 
-これが許可されない理由は `(->) :: OpenKind -> OpenKind -> *` なので、戻り値の型は必ず lifted type になるためである。
+これが許可されない理由は `(->) :: OpenKind -> OpenKind -> *` なので、戻り値の型が必ず lifted type になるためである。
 
-`Int# -> Int# :: *` であることを確認するため、トップレベルに unlifted type の関数を定義したらどうなるか試してみた。
+`Int# -> Int# :: *` であることを確認するため、以下の表をまとめた。
 
-```haskell
-unliftedValue :: Int#
-unliftedValue = 0#
+ 　 | 7.10.3 | 8.0.2 | 8.2.1
+----|------|-----|------
+:k Int | \* | \* | \*
+:k Int# | # | TYPE 'IntRep | TYPE 'IntRep
+:k (->) | \* -> \* -> \* | \* -> \* -> \* | TYPE q -> TYPE r -> \*
+:k (->) Int | \* -> \* | \* -> \* | \* -> \*
+:k (->) Int Int | \* | \* | \*
+:k (->) Int# | ERROR | ERROR | \* -> \* 
+:k (->) Int# Int# | ERROR | ERROR | \*
+:k Int# -> Int# | \* | \* | \*
+:k Int -> Int# | \* | \* | \*
+:k Int# -> Int | \* | \* | \*
 
--- エラーメッセージ
+さらにトップレベルに unlifted type の関数を定義した場合は、以下のようなエラーメッセージが返って来る。
+
+```bash
 Top-level bindings for unlifted types aren't allowed:
       unliftedValue = 0#
 ```
 
-`GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義可能。
+`GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義できる。
 
 ```haskell
 -- OpenKindProblem.hs
