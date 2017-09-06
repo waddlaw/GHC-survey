@@ -447,6 +447,19 @@ Using resolver: ghc-7.10.3 specified on command line
           | otherwise = myError "x < y"
 ```
 
+これが許可されない理由は `(->) :: OpenKind -> OpenKind -> *` なので、戻り値の型は必ず lifted type になるためである。
+
+`Int# -> Int# :: *` であることを確認するため、トップレベルに unlifted type の関数を定義したらどうなるか試してみた。
+
+```haskell
+unliftedValue :: Int#
+unliftedValue = 0#
+
+-- エラーメッセージ
+Top-level bindings for unlifted types aren't allowed:
+      unliftedValue = 0#
+```
+
 `GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義可能。
 
 ```haskell
