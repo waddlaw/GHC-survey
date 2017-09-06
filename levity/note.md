@@ -419,6 +419,7 @@ unliftedFunc x y
   | (I# x) < (I# y) = x +# y
   | otherwise = myError "x < y"
 
+myError :: String -> a
 myError s = error ("Error: " ++ s)
 
 main :: IO ()
@@ -447,7 +448,7 @@ Using resolver: ghc-7.10.3 specified on command line
           | otherwise = myError "x < y"
 ```
 
-これが許可されない理由は `(->) :: OpenKind -> OpenKind -> *` なので、戻り値の型が必ず lifted type になるためである。
+これが許可されない理由は `myError :: String -> a` の `a` が自動的に `*` カインドとして推論されてしまうからである。
 
 `Int# -> Int# :: *` であることを確認するため、以下の表をまとめた。
 
