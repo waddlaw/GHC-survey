@@ -450,7 +450,7 @@ Using resolver: ghc-7.10.3 specified on command line
 
 これが許可されない理由は `myError :: String -> a` の `a` が自動的に `*` カインドとして推論されてしまうからである。
 
-`Int# -> Int# :: *` であることを確認するため、以下の表をまとめた。
+`(->)` のカインドを確認するため、以下の表をまとめた。
 
  　 | 7.10.3 | 8.0.2 | 8.2.1
 ----|------|-----|------
@@ -472,7 +472,7 @@ Top-level bindings for unlifted types aren't allowed:
       unliftedValue = 0#
 ```
 
-`GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義できる。
+`GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って `myError` 関数を定義できる。
 
 ```haskell
 -- OpenKindProblem.hs
