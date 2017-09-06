@@ -1,10 +1,11 @@
 # 言語拡張とGHCオプション
-言語拡張 | できること
------- | -----
-[MagicHash](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#the-magic-hash) | `'x'#`, `3#` などの形式で unboxed value が扱える
-[PolyKinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XPolyKinds) | カインドポリモーフィック型を許可する
-[-fprint-explicit-kinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-kinds) | カインドを表示する
-[-fprint-explicit-runtime-reps](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-runtime-reps) | RuntimeRep を表示する
+言語拡張 | できること | GHC
+------ | ----- | -------
+[MagicHash](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#the-magic-hash) | `'x'#`, `3#` などの形式で unboxed value が扱える | 6.8.1
+[PolyKinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XPolyKinds) | カインドポリモーフィック型を許可する | 7.4.1
+[TypeInType](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XTypeInType) | カインド変数を扱える | 8.0.1
+[-fprint-explicit-kinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-kinds) | カインドを表示する | 7.8.1
+[-fprint-explicit-runtime-reps](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-runtime-reps) | RuntimeRep を表示する | 8.0.1
 
 ## MagicHash
 この拡張を有効にすると `x#y = 0` は `x#` という関数が引数 `y` を受け取り `0` を返すという意味になるので注意。
@@ -402,3 +403,58 @@ undefined :: Int
 ```
 
 この時まだ `x` の型が lifted なのか unlifted なのかわからないため `OpenKind` を使う。
+
+### OpenKind の問題点
+
+`OpenKind` では `myError s = error ("Blah" ++ s)` のような関数を `Int` と `Int#` の両方に対して動作するようなカインド多相関数として定義することはできない。
+
+`GHC-8.0.2`, `GHC-8.2.1` では `levity polymorphism` を使って定義可能。
+
+```haskell
+-- OpenKindProblem.hs
+{-# LANGUAGE MagicHash, ExplicitForAll, PolyKinds, TypeInType #-}
+
+import GHC.Prim (Int#, (+#), TYPE)
+import GHC.Types (Int(I#), RuntimeRep)
+
+liftedFunc :: Int -> Int -> Int
+liftedFunc x y
+  | x < y = x + y
+  | otherwise = myError "x < y"
+
+unliftedFunc :: Int# -> Int# -> Int#
+unliftedFunc x y
+  | (I# x) < (I# y) = x +# y
+  | otherwise = myError "x < y"
+
+myError
+  :: forall (l :: RuntimeRep) (a :: TYPE l).
+     String -> a
+myError s = error ("Error: " ++ s)
+
+main :: IO ()
+main = do
+  print $ liftedFunc 1 2
+  print $ I# (unliftedFunc 1# 2#)
+  print $ I# (unliftedFunc 2# 1#) -- error
+  print $ liftedFunc 2 1 -- error
+```
+
+実行結果
+```bash
+$ stack script OpenKindProblem.hs --resolver ghc-8.2.1
+Using resolver: ghc-8.0.2 specified on command line
+3
+3
+OpenKindProblem.hs: Error: x < y
+CallStack (from HasCallStack):
+  error, called at /home/bm12/repo/GHC8.2.1-survey/levity/code/OpenKindProblem.hs:19:13 in main:Main
+  
+$ stack script OpenKindProblem.hs --resolver ghc-8.0.2
+Using resolver: ghc-8.0.2 specified on command line
+3
+3
+OpenKindProblem.hs: Error: x < y
+CallStack (from HasCallStack):
+  error, called at /home/bm12/repo/GHC8.2.1-survey/levity/code/OpenKindProblem.hs:19:13 in main:Main
+```
