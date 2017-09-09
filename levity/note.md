@@ -2,6 +2,7 @@
 言語拡張 | できること | GHC
 ------ | ----- | -------
 [MagicHash](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#the-magic-hash) | `'x'#`, `3#` などの形式で unboxed value が扱える | 6.8.1
+[RankNTypes](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#ghc-flag--XRankNTypes) | 任意のランクの型を許可する | 6.8.1
 [PolyKinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XPolyKinds) | カインドポリモーフィック型を許可する | 7.4.1
 [TypeInType](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XTypeInType) | カインド変数を扱える | 8.0.1
 [print-explicit-kinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-kinds) | カインドを表示する | 7.8.1
@@ -42,6 +43,34 @@ Using resolver: ghc-8.2.1 specified on command line
 
 ### 参考
 - [Primitive Haskell](https://www.fpcomplete.com/blog/2015/02/primitive-haskell)
+
+## RankNTypes
+通常では定義できないが、`RankNTypes` を使えば定義できる例。
+特に、`forall` だけでなく `context` も対象となる点に注意。
+
+```haskell
+>>> f = undefined :: (Eq a => a) -> b  -- context
+• Illegal qualified type: Eq a => a
+  Perhaps you intended to use RankNTypes or Rank2Types
+• In an expression type signature: (Eq a => a) -> b
+  In the expression: undefined :: (Eq a => a) -> b
+  In an equation for ‘f’: f = undefined :: (Eq a => a) -> b
+
+>>> g = undefined :: (forall a . a) -> b -- forall
+  Illegal symbol '.' in type
+  Perhaps you intended to use RankNTypes or a similar language
+  extension to enable explicit-forall syntax: forall <tvs>. <type>
+  
+>>> :set -XExplicitForAll
+>>> g = undefined :: (forall a . a) -> b -- forall
+• Illegal polymorphic type: forall a. a
+  Perhaps you intended to use RankNTypes or Rank2Types
+• In an expression type signature: (forall a. a) -> b
+  In the expression: undefined :: (forall a. a) -> b
+  In an equation for ‘g’: g = undefined :: (forall a. a) -> b
+```
+
+
 
 ## PolyKinds
 
@@ -528,4 +557,3 @@ CallStack (from HasCallStack):
 Type | lifted type | `type Type = TYPE 'LiftedRep`
 Constraint | 型クラス制約 | 
 TYPE RuntimeRep | lifted type, unlifted type | RumtimeRep によってカインドが決まる
-
