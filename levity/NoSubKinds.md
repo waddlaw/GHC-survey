@@ -32,7 +32,7 @@ myError s = error ("Blah" ++ s)
 今の所、`myError` は `Int#` 型では利用できない。
 
 # Down with kinds
-以下に提案された `remedy` は、カインドのを分類するための階層 (`BOX`) と関連するダメな部分を直すためのものである。現在の GHC に実装するのではなく、Richard は自身のブランチに `BOX` を完全に除去したものを実装した。それどころか、 `* :: *` やコアにおける型とカインドを区別するものを無くした。詳細については[論文](http://cs.brynmawr.edu/~rae/papers/2013/fckinds/fckinds.pdf)を参照せよ。
+以下に提案された `remedy` は、カインドを分類するための階層 (`BOX`) と関連するダメな部分を直すためのものである。現在の GHC に実装するのではなく、Richard は自身のブランチに `BOX` を完全に除去したものを実装した。それどころか、 `* :: *` やコアにおける型とカインドを区別するものを無くした。詳細については[論文](http://cs.brynmawr.edu/~rae/papers/2013/fckinds/fckinds.pdf)を参照せよ。
 
 これ以降の内容は型とカインドがマージされた言語とセマンティクスを想定していることに注意せよ。
 
@@ -43,7 +43,7 @@ myError s = error ("Blah" ++ s)
 data Levity = Lifted | Unlifted
 ```
 
-そして、`Levity -> TYPE Lifted` の型となるような、新しいマジカル定数 `TYPE` を生成した。このアイデアは `TYPE Lifted` を古い `*` へ、 `TYPE Unlifted` を古い `#` に置き換えることである。その結果、仮に `* :: *` だった場合、 `TYPE Lifted` を意味するカインドに上手く分類できる。こうして、奇妙な型 `TYPE` が導入された。これで、 `OpenKind` は `forall (l :: Levity). TYPE l` のようにすることができる。特別に実際の型をいくつか示す。
+そして、`Levity -> TYPE Lifted` の型となるような新しいマジカル定数 `TYPE` を生成した。このアイデアは `TYPE Lifted` を古い `*` へ、 `TYPE Unlifted` を古い `#` に置き換えることである。その結果、仮に `* :: *` だった場合、 `TYPE Lifted` を意味するカインドに上手く分類できる。こうして、奇妙な型 `TYPE` が導入された。これで `OpenKind` は `forall (l :: Levity). TYPE l` のように置き換えることができる。実際の型をいくつか示す。
 
 ```haskell
 (->) :: forall (l1 :: Levity) (l2 :: Levity). TYPE l1 -> TYPE l2 -> TYPE Lifted
