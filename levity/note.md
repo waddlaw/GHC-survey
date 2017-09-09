@@ -554,6 +554,7 @@ CallStack (from HasCallStack):
 カインド | 意味 | 備考
 :-------:|---------|-----
 Constraint | 型クラス制約 | 
+Levity | Lifted, Unlifted |
 TYPE | lifted type, unlifted type | RuntimeRep によって決まる
 
 `Levity` を使う場合
@@ -596,7 +597,7 @@ undefined :: forall (l :: Levity) (a :: TYPE l). a
 kind | data TYPE (a :: Levity) <br> data Levity <br> type * = TYPE Lifted <br> type # = TYPE Unlifted | TYPE :: a -> TYPE a <br> Lifted, Unlifted :: Levity <br>　<br>　
 type | data Maybe (a :: TYPE Lifted) <br> data Bool <br> type String = [Char] | Just :: a -> Maybe a, Nothing :: Maybe a <br> False, True :: Bool <br>　
 
-
+つまり、カインドは型と同じ。
 
 
 
