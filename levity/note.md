@@ -553,7 +553,51 @@ CallStack (from HasCallStack):
 
 カインド | 意味 | 備考
 :-------:|---------|-----
-\* | lifted type | 互換性のために定義されている `type * = TYPE 'LiftedRep`
-Type | lifted type | `type Type = TYPE 'LiftedRep`
 Constraint | 型クラス制約 | 
-TYPE RuntimeRep | lifted type, unlifted type | RumtimeRep によってカインドが決まる
+TYPE | lifted type, unlifted type | RuntimeRep によって決まる
+
+`Levity` を使う場合
+
+```haskell
+data Levity = Lifted | Unlifted
+
+data TYPE (a :: Levity) where
+  TYPE :: a -> TYPE Lifted
+
+type * = TYPE Lifted
+type # = TYPE Unlifted
+type OpenKind = forall (l :: Levity). TYPE l
+```
+
+これを使って、既存のカインドを再定義できる。
+
+カインド | エイリアス
+:-------:|--------
+\* | type \* = TYPE Lifted
+\#	 | type \# = TYPE Unlifted
+OpenKind | type OpenKind = forall (l :: Levity). TYPE l
+Box | type Box = TYPE Lifted
+
+```haskell
+(->) :: OpenKind -> OpenKind -> *
+(->) :: forall (l1 :: Levity) (l2 :: Levity). TYPE l1 -> TYPE l2 -> TYPE Lifted
+
+error :: String -> *
+error :: forall (l :: Levity) (a :: TYPE l). String -> a
+
+undefined :: *
+undefined :: forall (l :: Levity) (a :: TYPE l). a
+```
+
+# kind と type の関係
+
+　| type constructor | data constructor
+------ |------ | ------
+kind | data TYPE (a :: Levity) <br> data Levity <br> type * = TYPE Lifted <br> type # = TYPE Unlifted | TYPE :: a -> TYPE a <br> Lifted, Unlifted :: Levity <br>　<br>　
+type | data Maybe (a :: TYPE Lifted) <br> data Bool <br> type String = [Char] | Just :: a -> Maybe a, Nothing :: Maybe a <br> False, True :: Bool <br>　
+
+
+
+
+
+
