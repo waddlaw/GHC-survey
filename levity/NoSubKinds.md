@@ -118,7 +118,7 @@ f x = x
 例: 
 
 ```haskell
-g :: forall (a:*). forall v. forall (b :: TYPE v). Show a => a -> b
+g :: forall (a :: *). forall v. forall (b :: TYPE v). Show a => a -> b
 g x = error (show x) 
 ```
 
