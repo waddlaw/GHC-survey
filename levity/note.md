@@ -554,7 +554,7 @@ CallStack (from HasCallStack):
 カインド | 意味 | 備考
 :-------:|---------|-----
 Constraint | 型クラス制約 | 
-Levity | Lifted, Unlifted |
+Levity | Lifted, Unlifted | 実際の実装では RuntimeRep
 TYPE | lifted type, unlifted type | RuntimeRep によって決まる
 
 `Levity` を使う場合
@@ -597,7 +597,41 @@ undefined :: forall (l :: Levity) (a :: TYPE l). a
 kind | data TYPE (a :: Levity) <br> data Levity <br> type * = TYPE Lifted <br> type # = TYPE Unlifted | TYPE :: a -> TYPE a <br> Lifted, Unlifted :: Levity <br>　<br>　
 type | data Maybe (a :: TYPE Lifted) <br> data Bool <br> type String = [Char] | Just :: a -> Maybe a, Nothing :: Maybe a <br> False, True :: Bool <br>　
 
-つまり、カインドは型と同じ。
+つまり、カインドと型は同じ。
+
+# levity polymorphism
+
+以下の形式をサポートしたい。
+
+```haskell
+\x -> x :: forall (v :: Levity) (a :: TYPE v). a -> a
+
+myError :: forall (v :: Levity) (a :: TYPE v). String -> a
+myError s = error ("Me" ++ s)
+```
+
+一般的な levity polymorphism を禁止する代わりに、以下のルールを満たす場合のみ許可する。
+
+- ユーザは型シグネチャによって levity polymorphism を特別にリクエストできる
+- Levity-polymorphic 型変数は矢印の右側にのみ出現することができる
+
+```haskell
+good :: forall (v :: Levity) (a :: *) (b :: TYPE v). (a -> b) -> a -> b
+good g x = g x
+```
+
+- `ty:TYPE l` は 矢印の左側には出現できない
+- `ty:TYPE l` は 任意の束縛の型の中には出現しない
+- コンストラクタのフィールドには出現できない
+
+式 | Lint | 理由
+---|-----|-----
+(Int -> (ty::TYPE l)) -> Int | OK |
+((ty::TYPE l) -> Int) -> Int | NG | `(ty:TYPE l) -> Int` で左側に出現するから
+data T l (a::TYPE l) = MkT (Int -> a) | OK | MkT :: (Int -> a) -> T l (a::TYPE l)
+MkT Unlifted Int# (\n -> error Unlifted Int# "urk") | OK | MkT :: (Int -> Int#) -> T Unlifted (Int#::TYPE Unlifted)
+undefined | OK | undefined :: forall v. forall (a:TYPE v). a
+
 
 
 
