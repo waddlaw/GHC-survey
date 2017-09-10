@@ -134,6 +134,8 @@ PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | (a -> b) 
 
 ## DataKinds
 
+値が型へ、型がカインドへそれぞれ昇格する。
+
 基本的な使い方
 ```haskell
 {-# LANGUAGE DataKinds #-}
@@ -147,6 +149,20 @@ data SimpleData a = SimpleData a
  ---- | ----- | ------
  値 | SimpleData :: a -> SimpleData a | SimpleData :: a -> SimpleData a
  型 | SimpleData :: \* -> \* <br> | SimpleData :: \* -> \* <br> 'SimpleData :: k -> SimpleData k
+ kind | | SimpleData :: \* -> \*
+ 
+また、値が無い場合も定義可能。この場合はコンストラクタが被らないため `'` が省略される。
+
+```haskell
+{-# LANGUAGE DataKinds #-}
+
+data SimpleData a = SimpleData a
+```
+
+　| 通常 | DataKinds
+ ---- | ----- | ------
+ 値 |  | 
+ 型 | SimpleData :: \* -> \* | SimpleData :: \* -> \*
  kind | | SimpleData :: \* -> \*
 
 # (un)lifted type と (un)boxed type
