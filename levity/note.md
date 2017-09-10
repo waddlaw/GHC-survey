@@ -4,6 +4,7 @@
 [MagicHash](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#the-magic-hash) | `'x'#`, `3#` などの形式で unboxed value が扱える | 6.8.1
 [RankNTypes](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#ghc-flag--XRankNTypes) | 任意のランクの型を許可する | 6.8.1
 [PolyKinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XPolyKinds) | カインドポリモーフィック型を許可する | 7.4.1
+[DataKinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#ghc-flag--XDataKinds) | データ型をカインドに昇格させる | 7.4.1
 [TypeInType](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html?highlight=polykinds#ghc-flag--XTypeInType) | カインド変数を扱える | 8.0.1
 [print-explicit-kinds](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-kinds) | カインドを表示する | 7.8.1
 [print-explicit-runtime-reps](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using.html?highlight=kind#ghc-flag--fprint-explicit-runtime-reps) | RuntimeRep を表示する | 8.0.1
@@ -131,7 +132,22 @@ PolyKinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE
 PolyKinds <br> print-explicit-kinds | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
 PolyKinds <br> print-explicit-kinds <br> print-explicit-runtime-reps | (a -> b) -> a -> b | forall (r :: GHC.Types.RuntimeRep) a (b :: TYPE r). <br>　(a -> b) -> a -> b
 
+## DataKinds
 
+基本的な使い方
+```haskell
+{-# LANGUAGE DataKinds #-}
+
+data SimpleData a = SimpleData a
+```
+
+上記の宣言によって、次のような変化が起きる。
+
+　| 通常 | DataKinds
+ ---- | ----- | ------
+ 値 | SimpleData :: a -> SimpleData a | SimpleData :: a -> SimpleData a
+ 型 | SimpleData :: \* -> \* <br> | SimpleData :: \* -> \* <br> 'SimpleData :: k -> SimpleData k
+ kind | | SimpleData :: \* -> \*
 
 # (un)lifted type と (un)boxed type
  _ | boxed type <br> (ヒープポインタで表現される型) | unboxed type <br> (ヒープポインタで表現されない型)
