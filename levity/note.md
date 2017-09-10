@@ -164,6 +164,8 @@ data SimpleData a = SimpleData a
  値 |  | 
  型 | SimpleData :: \* -> \* | SimpleData :: \* -> \*
  kind | | SimpleData :: \* -> \*
+ 
+[Kind and Type Namespaces](https://ghc.haskell.org/trac/ghc/wiki/GhcKinds/KindsWithoutData#KindandTypeNamespaces) によると、型とカインドは同じ名前空間を共有しているため、実際には `kind` の行は存在しない。
 
 # (un)lifted type と (un)boxed type
  _ | boxed type <br> (ヒープポインタで表現される型) | unboxed type <br> (ヒープポインタで表現されない型)
