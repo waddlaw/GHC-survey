@@ -3,13 +3,13 @@
 - [NoSubKinds](https://ghc.haskell.org/trac/ghc/wiki/NoSubKinds)
     - [日本語訳](/levity/NoSubKinds.md)
 - [The data type Type and its friends](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/TypeType)
-- [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
 - [Unlifted data types](https://ghc.haskell.org/trac/ghc/wiki/UnliftedDataTypes)
 - [Unboxed sum types](https://ghc.haskell.org/trac/ghc/wiki/UnpackedSumTypes)
 - [DependentHaskell](https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell)
 - [DependentHaskell/Phase1](https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell/Phase1)
 
 ## ticket
+- [Levity polymorphism](https://ghc.haskell.org/trac/ghc/wiki/LevityPolymorphism)
 - [Kind polymorphism and unboxed types: bad things are happening](https://ghc.haskell.org/trac/ghc/ticket/11471)
 - [($) returning kind # no longer type checks](https://ghc.haskell.org/trac/ghc/ticket/8739)
 
