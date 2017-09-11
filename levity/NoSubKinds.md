@@ -162,7 +162,7 @@ foo _ = g (# error "a", error "b" #)
 ```
 
 結論:
-- `forall (l:Levity). ty` はカインド `*` である。我々はそれを値抽象パイとして考える。`undefined :: forall l. forall (a:Type l). a` の全体の型のカインドは `*` であり、 lifted である。
+- `forall (l:Levity). ty` は `*` カインドである。我々はそれを値抽象パイとして考える。`undefined :: forall l. forall (a:Type l). a` の全体の型のカインドは `*` であり、 *lifted* である。
 - forall の本体は、ある levity `l` となる `Type l` カインドとなるべきであり、それが forall のカインドとなる。これは、本体がカインド `* -> *` とならないことを意味し、間違いなく `k` ではない。これは、正しく無いカインド `forall k (a::k). a` となる。 (Cf [#10114](https://ghc.haskell.org/trac/ghc/ticket/10114))
 
 
@@ -190,7 +190,7 @@ type family G a :: k where
 foo :: G a -> ...
 ```
 
-`G a` のカインドは `TYPE r` となるはずだが、それは `foo` の引数のサイズがわからないことを意味する。つまり大失敗だ。
+`G a` のカインドは `TYPE r` となるはずだが、それは `foo` の引数のメモリサイズがわからないことを意味する。つまり大失敗だ。
 仮に `k` が `#` とわかっていたとしても、まだこの問題は解決しない。なぜなら、unboxed 型によって多数の異なるサイズがあるからだ。
 
 そのため、こうした。
