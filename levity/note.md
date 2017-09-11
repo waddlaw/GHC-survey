@@ -226,7 +226,7 @@ TestKind.hs:5:6: error:
 
 # 最初のカインド
 
-カインド | 意味
+基本カインド | 意味
 :-------:|---------
 \* | lifted boxed types
 \# | unlifted types (unlifted boxed type, unlifted unboxed type)
@@ -585,7 +585,7 @@ CallStack (from HasCallStack):
 
 # remedy 後のカインド
 
-カインド | 意味 | 備考
+基本カインド | 意味 | 備考
 :-------:|---------|-----
 Constraint | 型クラス制約 | 
 Levity | Lifted, Unlifted | 実際の実装では RuntimeRep
@@ -606,7 +606,7 @@ type OpenKind = forall (l :: Levity). TYPE l
 
 これを使って、既存のカインドを再定義できる。
 
-カインド | エイリアス
+基本カインド | エイリアス
 :-------:|--------
 \* | type \* = TYPE Lifted
 \#	 | type \# = TYPE Unlifted
@@ -666,7 +666,52 @@ data T l (a::TYPE l) = MkT (Int -> a) | OK | MkT :: (Int -> a) -> T l (a::TYPE l
 MkT Unlifted Int# (\n -> error Unlifted Int# "urk") | OK | MkT :: (Int -> Int#) -> T Unlifted (Int#::TYPE Unlifted)
 undefined | OK | undefined :: forall v. forall (a:TYPE v). a
 
+以下のコードは `TYPE` と `levity` がプログラマに公開された時に問題となる。
 
+```haskell
+bad :: forall v. forall (a :: TYPE v). a -> a 
+bad x = x
+
+good :: forall (a:*). forall v. forall (b :: TYPE v). Show a => a -> b
+good x = error (show x) 
+```
+
+この問題に対して `levity` 変数が含まないことを制約 `FIXED` として持たせるという解決策もある。
+
+```haskell
+(->) :: forall v1,v2, FIXED v1 => TYPE v1 -> TYPE v2 -> *
+```
+
+# 実装
+
+以下の定義は問題無い。
+
+```haskell
+type family F a where
+  F Int# = Int
+```
+
+しかし、以下はまずい。
+
+```haskell
+type family G a :: k where
+  G Int = Int#
+  G Bool = Int
+```
+
+なぜなら `foo :: G a -> ...` と定義したとき `G a :: TYPE r` となり、 `G a :: TYPE Lifted` か `G a :: TYPE Unlifted` なのか決まらないため、コンパイルができない。
+
+仮に `G a :: TYPE Unlifted` とわかったとしても `unboxed type` によってメモリサイズが異なるため、やはりダメ。
+
+そのため `Levity` の代わりに `RuntimeRep` を利用する。
+
+```haskell
+data RuntimeRep = PtrRepLifted | PtrRepUnlifted | IntRep | VoidRep | ...
+TYPE :: RuntimeRep -> *
+type * = TYPE 'PtrRepLifted
+```
+
+この結果、型のカインドから常に値のメモリサイズがわかるようになった。
 
 
 
