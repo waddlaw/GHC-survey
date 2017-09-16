@@ -156,7 +156,7 @@ data SimpleData a = SimpleData a
 ```haskell
 {-# LANGUAGE DataKinds #-}
 
-data SimpleData a = SimpleData a
+data SimpleData a
 ```
 
 　| 通常 | DataKinds
