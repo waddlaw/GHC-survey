@@ -17,7 +17,7 @@ test a = case a of
 
 `GHC-8.0.2` で読み込んだ場合は何も警告されない。
 
-```haskell
+```bash
 $ stack repl --resolver=ghc-8.0.2 --ghc-options="-Wall" EmptyCase.hs
 Attempting to load anyway.
 Configuring GHCi with the following packages:
@@ -30,7 +30,7 @@ Loaded GHCi configuration from /tmp/ghci11195/ghci-script
 
 `GHC-8.2.1` で読み込んだ場合は、以下のように警告が出るようになった。
 
-```haskell
+```bash
 $ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" EmptyCase.hs
 Attempting to load anyway.
 Configuring GHCi with the following packages:
@@ -53,7 +53,7 @@ Loaded GHCi configuration from /tmp/ghci11271/ghci-script
 
 実行するとどうなるか？
 
-```haskell
+```bash
 *Test> test True
 *** Exception: /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/EmptyCase.hs:5:10-13: Non-exhaustive patterns in case
 
