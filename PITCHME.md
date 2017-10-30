@@ -6,6 +6,11 @@
 
 ---
 
+exhaustive を発音してみよう！
+
+> \ig-ˌzȯ-ˈsti-və-tē\
+
+---
 
 <span class="menu-title" style="display: none">Exhaustiveness Checking とは？</span>
 
