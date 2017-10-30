@@ -146,11 +146,13 @@ pattern conid varid1 ... varidn <- pat
 ```haskell
 {-# LANGUAGE PatternSynonyms #-}
 
-pattern P :: ()
-pattern P = ()
+data A = A
 
-foo :: () -> ()
-foo P = ()
+pattern P :: A
+pattern P = A
+
+foo :: A -> A
+foo P = A
 ```
 
 ### GHC-8.0.2
@@ -159,7 +161,7 @@ foo P = ()
 $ stack repl --resolver=ghc-8.0.2 --ghc-options="-Wall" PS2.hs
 [1 of 1] Compiling Main
 
-PS2.hs:7:1: warning: [-Wincomplete-patterns]
+PS2.hs:9:1: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
     In an equation for ‘foo’: Patterns not matched: _
 *Main>
@@ -171,12 +173,12 @@ PS2.hs:7:1: warning: [-Wincomplete-patterns]
 $ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
 [1 of 1] Compiling Main
 
-PS2.hs:7:1: warning: [-Wincomplete-patterns]
+PS2.hs:9:1: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
     In an equation for ‘foo’: Patterns not matched: _
   |
-7 | foo P = ()
-  | ^^^^^^^^^^
+9 | foo P = A
+  | ^^^^^^^^^
 *Main>
 ```
 
@@ -185,12 +187,13 @@ PS2.hs:7:1: warning: [-Wincomplete-patterns]
 ```haskell
 {-# LANGUAGE PatternSynonyms #-}
 
-pattern P :: ()
-pattern P = ()
-{-# COMPLETE P #-}
+data A = A
 
-foo :: () -> ()
-foo P = ()
+pattern P :: A
+pattern P = A
+
+foo :: A -> A
+foo P = A
 ```
 
 ## 参考
