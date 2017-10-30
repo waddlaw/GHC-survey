@@ -182,15 +182,17 @@ PS2.hs:9:1: warning: [-Wincomplete-patterns]
 *Main>
 ```
 
-新たに導入されたプラグマを使うことで、このエラーを抑制できる。
+新たに導入された `COMPLETE` プラグマを使うことで、このエラーを抑制できる。
 
 ```haskell
 {-# LANGUAGE PatternSynonyms #-}
 
-data A = A
+data A = A deriving Show
 
 pattern P :: A
 pattern P = A
+
+{-# COMPLETE P #-}
 
 foo :: A -> A
 foo P = A
@@ -204,3 +206,4 @@ foo P = A
 - [Pattern Synonymsで遊ぶ](https://qiita.com/as_capabl/items/d2eb781478e26411a44c)
 - [9.7. Pattern synonyms](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#ghc-flag--XPatternSynonyms)
 - [CompleteSigs](https://ghc.haskell.org/trac/ghc/wiki/PatternSynonyms/CompleteSigs)
+- [COMPLETE pragmas](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#complete-pragmas)
