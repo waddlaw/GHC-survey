@@ -23,12 +23,7 @@ test a = case a of
 
 ```bash
 $ stack repl --resolver=ghc-8.0.2 --ghc-options="-Wall" EmptyCase.hs
-Attempting to load anyway.
-Configuring GHCi with the following packages:
-GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
-[1 of 1] Compiling Test             ( /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/EmptyCase.hs, interpreted )
-Ok, modules loaded: Test.
-Loaded GHCi configuration from /tmp/ghci11195/ghci-script
+[1 of 1] Compiling Test
 *Test>
 ```
 
@@ -36,12 +31,9 @@ Loaded GHCi configuration from /tmp/ghci11195/ghci-script
 
 ```bash
 $ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" EmptyCase.hs
-Attempting to load anyway.
-Configuring GHCi with the following packages:
-GHCi, version 8.2.1: http://www.haskell.org/ghc/  :? for help
-[1 of 1] Compiling Test             ( /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/EmptyCase.hs, interpreted )
+[1 of 1] Compiling Test
 
-/home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/EmptyCase.hs:5:10: warning: [-Wincomplete-patterns]
+EmptyCase.hs:5:10: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
     In a case alternative:
         Patterns not matched:
@@ -50,8 +42,6 @@ GHCi, version 8.2.1: http://www.haskell.org/ghc/  :? for help
   |
 5 | test a = case a of
   |          ^^^^
-Ok, 1 module loaded.
-Loaded GHCi configuration from /tmp/ghci11271/ghci-script
 *Test>
 ```
 
@@ -59,10 +49,10 @@ Loaded GHCi configuration from /tmp/ghci11271/ghci-script
 
 ```bash
 *Test> test True
-*** Exception: /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/EmptyCase.hs:5:10-13: Non-exhaustive patterns in case
+*** Exception: ...
 
 *Test> test False
-*** Exception: /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/EmptyCase.hs:5:10-13: Non-exhaustive patterns in case
+*** Exception: ...
 ```
 
 そもそも `EmptyCase` とか邪悪な感じしかしないんだけど、これが役立つ時って何があるんだろう？
@@ -138,10 +128,6 @@ showHead _  = "No head!"
 ```bash
 >>> showHead "a"
 "*** Exception: Prelude.undefined
-CallStack (from HasCallStack):
-  error, called at libraries/base/GHC/Err.hs:79:14 in base:GHC.Err
-  undefined, called at /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms-example.hs:20:21 in main:Main
-
 >>> showHead ""
 "No head!"
 ```
@@ -159,57 +145,52 @@ pattern conid varid1 ... varidn <- pat
 
 ```haskell
 {-# LANGUAGE PatternSynonyms #-}
-module Patterns where
 
-data ErrorCall = ErrorCallWithLocation String String deriving (Eq, Ord)
+pattern P :: ()
+pattern P = ()
 
-pattern ErrorCall :: String -> ErrorCall
-pattern ErrorCall err = ErrorCallWithLocation err ""
-
-getMsg :: ErrorCall -> String
-getMsg (ErrorCall y) = y
-
-getMsg' :: ErrorCall -> String
-getMsg' (ErrorCallWithLocation y _) = y
+foo :: () -> ()
+foo P = ()
 ```
 
 ### GHC-8.0.2
 
 ```bash
-$ stack repl --resolver=ghc-8.0.2 --ghc-options="-Wall" PatternSynonyms.hs
+$ stack repl --resolver=ghc-8.0.2 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
 
-Warning: Couldn't find a component for file target /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms.hs. Attempting to load anyway.
-Configuring GHCi with the following packages:
-GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
-[1 of 1] Compiling Patterns         ( /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms.hs, interpreted )
-
-/home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms.hs:11:1: warning: [-Wincomplete-patterns]
+PS2.hs:7:1: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
-    In an equation for ‘getMsg’: Patterns not matched: _
-Ok, modules loaded: Patterns.
-Loaded GHCi configuration from /tmp/ghci13076/ghci-script
-*Patterns>
+    In an equation for ‘foo’: Patterns not matched: _
+*Main>
 ```
 
 ### GHC-8.2.1
 
 ```bash
-$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PatternSynonyms.hs
+$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
 
-Warning: Couldn't find a component for file target /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms.hs. Attempting to load anyway.
-Configuring GHCi with the following packages:
-GHCi, version 8.2.1: http://www.haskell.org/ghc/  :? for help
-[1 of 1] Compiling Patterns         ( /home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms.hs, interpreted )
-
-/home/bm12/repo/guchi/GHC8.2.1-survey/Exhaustiveness-checking/src/PatternSynonyms.hs:11:1: warning: [-Wincomplete-patterns]
+PS2.hs:7:1: warning: [-Wincomplete-patterns]
     Pattern match(es) are non-exhaustive
-    In an equation for ‘getMsg’: Patterns not matched: _
-   |
-11 | getMsg (ErrorCall y) = y
-   | ^^^^^^^^^^^^^^^^^^^^^^^^
-Ok, 1 module loaded.
-Loaded GHCi configuration from /tmp/ghci13196/ghci-script
-*Patterns>
+    In an equation for ‘foo’: Patterns not matched: _
+  |
+7 | foo P = ()
+  | ^^^^^^^^^^
+*Main>
+```
+
+新たに導入されたプラグマを使うことで、このエラーを抑制できる。
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+pattern P :: ()
+pattern P = ()
+{-# COMPLETE P #-}
+
+foo :: () -> ()
+foo P = ()
 ```
 
 ## 参考
