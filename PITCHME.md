@@ -321,7 +321,7 @@ Haskeller の憧れ！
 
 +++
 
-?image=assets/Snoyman.jpeg&size=auto 90%
+---?image=assets/Snoyman.jpeg&size=auto 90%
 
 +++
 
