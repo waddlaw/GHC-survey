@@ -194,9 +194,9 @@ foo P = ()
 ```
 
 ## 参考
-### ghc trac
 - [Exhaustiveness check for EmptyCase (Trac #10746)](https://phabricator.haskell.org/D2105)
 - [No non-exhaustive pattern match warning given for empty case analysis](https://ghc.haskell.org/trac/ghc/ticket/10746)
 - [Exhaustiveness checks for pattern synonyms](https://ghc.haskell.org/trac/ghc/ticket/8779)
 - [Pattern Synonyms](https://ghc.haskell.org/trac/ghc/wiki/PatternSynonyms)
 - [Pattern Synonymsで遊ぶ](https://qiita.com/as_capabl/items/d2eb781478e26411a44c)
+- [9.7. Pattern synonyms](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#ghc-flag--XPatternSynonyms)
