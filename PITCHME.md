@@ -4,4 +4,8 @@ EmptyCase
 
 ---
 
-PatternSynonyms
+PatternSynonyms1
+
++++
+
+PatternSynonyms2
