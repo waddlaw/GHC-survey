@@ -45,8 +45,6 @@ good False = undefined
 $ stack repl --resolver=ghc-8.0.2 bad.hs
 ```
 
-+++
-
 ```
 $ stack repl --resolver=ghc-8.0.2 bad.hs
 [1 of 1] Compiling Main
@@ -54,7 +52,7 @@ Ok, 1 module loaded.
 *Main>
 ```
 
-<br>
++++
 
 適当な事言わないでくださいよ・・・<br>
 警告出てないじゃないですか！
