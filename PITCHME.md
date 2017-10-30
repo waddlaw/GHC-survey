@@ -325,7 +325,7 @@ Haskeller の憧れ！
 
 +++
 
-![マイケルバーガー](assets/Snoyman2.jpg)
+![マイケルバーガー](assets/Snoyman3.jpg)
 
 ---
 
