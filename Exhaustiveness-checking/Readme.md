@@ -219,3 +219,5 @@ Loaded GHCi configuration from /tmp/ghci13196/ghci-script
 - [Exhaustiveness checks for pattern synonyms](https://ghc.haskell.org/trac/ghc/ticket/8779)
 - [Pattern Synonyms](https://ghc.haskell.org/trac/ghc/wiki/PatternSynonyms)
 - [Pattern Synonymsで遊ぶ](https://qiita.com/as_capabl/items/d2eb781478e26411a44c)
+- [Haskell定理証明士がEmptyCase拡張によって受ける恩恵と効能](http://notogawa.hatenablog.com/entry/2014/04/24/001438)
+- [basic-syntax-extensions](https://www.schoolofhaskell.com/school/to-infinity-and-beyond/pick-of-the-week/guide-to-ghc-extensions/basic-syntax-extensions#emptycase)
