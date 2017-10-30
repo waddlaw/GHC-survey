@@ -6,21 +6,16 @@
 
 @title[Exhaustiveness Checking とは？]
 
-## Exhaustiveness Checking とは 何か？
+## Exhaustiveness Checking <br>とは 何か？
 
 +++
+
+実行してみましょう！
 
 ```haskell
 bad :: Bool -> Bool
 bad True = undefined
 ```
-
-実行してみましょう！
-
-+++
-
-何言ってるんですか？
-警告出てないじゃないですか！
 
 ```bash
 $ stack repl --resolver=ghc-8.0.2 bad.hs
@@ -29,7 +24,9 @@ Ok, 1 module loaded.
 *Main>
 ```
 
-なぜでしょう？
+何言ってるんですか？警告出てないじゃないですか！
+
+Question: なぜ警告が出ないのでしょうか？ 
 
 +++
 
