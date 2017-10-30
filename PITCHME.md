@@ -317,11 +317,11 @@ False
 
 Haskeller の憧れ！
 
-マイケル！
-
 +++
 
 ![マイケル](assets/Snoyman.jpeg)
+
+Michael Snoyman
 
 +++
 
