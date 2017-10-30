@@ -7,7 +7,7 @@
 発表内容 | 担当者 | 資料
 ----|----|----
 Levity polymorphism | @waddlaw | [paper](/levity/levity-polymorphism.md), [note](/levity/note.md)
-Exhaustiveness checking | @waddlaw | |
+Exhaustiveness checking | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC8.2.1-survey/slide-pattern-synonyms#/) |
 Indexed Typeable representations | @pythonissam |
 Deriving | @pythonissam |
 Backpack | @matsubara0507 |
