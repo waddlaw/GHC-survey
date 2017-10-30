@@ -551,3 +551,201 @@ PatternSynonyms 拡張は意外と奥が深いし、使いようによっては�
 ---
 
 # Thanks!
+
+---
+
+資料作成時、本当にこれで終わりそうになりましたが、思い出したので本題に入ります
+
+---
+
+このコードは一見したところ大丈夫そうだよね？<br>だけど警告がでるんです。
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+data A = A
+
+pattern P :: A
+pattern P = A
+
+foo :: A -> A
+foo P = A
+```
+
++++
+
+```
+$ stack repl --resolver=ghc-8.0.2 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
+
+PS2.hs:9:1: warning: [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘foo’: Patterns not matched: _
+```
+
+```
+$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
+
+PS2.hs:9:1: warning: [-Wincomplete-patterns]
+    Pattern match(es) are non-exhaustive
+    In an equation for ‘foo’: Patterns not matched: _
+  |
+9 | foo P = A
+  | ^^^^^^^^^
+```
+
++++
+
+Question: なぜ警告が出るのでしょうか？
+
+Hint: A 型の値を列挙すればわかるよ。本当だよ。
+
++++
+
+Answer:
+
+```haskell
+data A = A
+
+-- A 型の値
+-- undefined :: A
+-- A :: A
+```
+
++++
+
+つまり、警告を解消するためにはこうしないといけない。
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+data A = A
+
+pattern P :: A
+pattern P = A
+
+foo :: A -> A
+foo P = A
+foo _ = undefined
+```
+
+```
+$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
+Ok, 1 module loaded.
+*Main>
+```
+
++++
+
+Question: 以下のコードで foo undefined を実行するとどうなるでしょうか？
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+data A = A
+
+pattern P :: A
+pattern P = A
+
+foo :: A -> String
+foo P = "A"
+foo _ = "undefined"
+```
+
++++
+
+Answer:
+
+```
+$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
+Ok, 1 module loaded.
+*Main> foo undefined
+"*** Exception: Prelude.undefined
+```
+
++++
+
+# Why?
+
++++
+
+実行の流れ
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+data A = A
+
+pattern P :: A
+pattern P = A
+
+foo :: A -> String
+foo P = "A"
+foo _ = "undefined"
+
+>>> foo undefined
+ERROR
+```
+
+@[12](foo undefined を実行する)
+@[9](foo undefined は foo P にマッチしてしまう) 
+@[7](undefined に対するパターンマッチが存在しない)
+@[13](結果としてエラーが発生する)
+
+
+---
+
+`COMPLETE` プラグマが導入されました。
+
+```haskell
+-- Syntax は以下の2パターンしかないよ
+{-# COMPLETE con_1, ..., con_n #-}
+{-# COMPLETE con_1, ..., con_n :: T #-}
+```
+
++++
+
+Semantics, Typing については興味ある人だけ確認しておこう！
+
+- [CompleteSigs](https://ghc.haskell.org/trac/ghc/wiki/PatternSynonyms/CompleteSigs)
+
+---
+
+これで警告が出なくなります。
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+data A = A
+
+pattern P :: A
+pattern P = A
+
+{-# COMPLETE P #-}
+
+foo :: A -> A
+foo P = A
+```
+
+```
+$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
+[1 of 1] Compiling Main
+Ok, 1 module loaded.
+*Main>
+```
+
++++
+
+`COMPLETE` プラグマとは
+
+> The COMPLETE pragma is used to inform the pattern match checker that a certain set of patterns is complete and that any function which matches on all the specified patterns is total.
+
+---
+
+まとめ
+
+- EmptyCase について警告が出るようになった
+- PatternSynonyms について警告を出さないように制御する COMPLETE プラグマが追加された
