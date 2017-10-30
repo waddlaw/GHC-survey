@@ -321,11 +321,11 @@ Haskeller の憧れ！
 
 +++
 
----?image=assets/Snoyman.jpeg&size=auto 90%
+![マイケルバーガー](assets/Snoyman.jpeg%)
 
 +++
 
-![マイケルバーガー](assets/Snoyman2.jpg&size=auto 90%)
+![マイケルバーガー](assets/Snoyman2.jpg)
 
 ---
 
