@@ -130,7 +130,7 @@ pattern Head x <- x:_ -- _ を含む物は = では定義できない
 
 showHead :: [a] -> String
 showHead (Head _) = undefined
-showHead _  = "2No head!"
+showHead _  = "No head!"
 ```
 
 実行するとこんな感じ。
