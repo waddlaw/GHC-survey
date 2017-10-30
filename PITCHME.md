@@ -1,5 +1,11 @@
 @title[Exhaustiveness Checking]
 
+# Exhaustiveness Checking
+
+- EmptyCase
+- PatternSynonyms
+
+
 ---
 @title[EmptyCase]
 EmptyCase
