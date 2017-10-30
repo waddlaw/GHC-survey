@@ -2,8 +2,8 @@
 
 # Exhaustiveness Checking
 
-- EmptyCase
-- PatternSynonyms
+EmptyCase
+PatternSynonyms
 
 
 ---
