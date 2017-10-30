@@ -319,6 +319,14 @@ Haskeller の憧れ！
 
 マイケル！
 
++++
+
+![マイケル](assets/Snoyman.jpg)
+
++++
+
+![マイケルバーガー](assets/Snoyman2.jpg)
+
 ---
 
 前のスライドで、さらっと `bidirectional synonyms` とカッコで記述したの気づきました？
