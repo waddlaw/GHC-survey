@@ -637,65 +637,6 @@ Ok, 1 module loaded.
 *Main>
 ```
 
-+++
-
-Question: 以下のコードで foo undefined を実行するとどうなるでしょうか？
-
-```haskell
-{-# LANGUAGE PatternSynonyms #-}
-
-data A = A
-
-pattern P :: A
-pattern P = A
-
-foo :: A -> String
-foo P = "A"
-foo _ = "undefined"
-```
-
-+++
-
-Answer:
-
-```
-$ stack repl --resolver=ghc-8.2.1 --ghc-options="-Wall" PS2.hs
-[1 of 1] Compiling Main
-Ok, 1 module loaded.
-*Main> foo undefined
-"*** Exception: Prelude.undefined
-```
-
-+++
-
-# Why?
-
-+++
-
-実行の流れ
-
-```haskell
-{-# LANGUAGE PatternSynonyms #-}
-
-data A = A
-
-pattern P :: A
-pattern P = A
-
-foo :: A -> String
-foo P = "A"
-foo _ = "undefined"
-
->>> foo undefined
-ERROR
-```
-
-@[12](foo undefined を実行する)
-@[9](foo undefined は foo P にマッチしてしまう) 
-@[7](undefined に対するパターンマッチが存在しない)
-@[13](結果としてエラーが発生する)
-
-
 ---
 
 `COMPLETE` プラグマが導入されました。
@@ -742,6 +683,25 @@ Ok, 1 module loaded.
 `COMPLETE` プラグマとは
 
 > The COMPLETE pragma is used to inform the pattern match checker that a certain set of patterns is complete and that any function which matches on all the specified patterns is total.
+
++++
+
+今回の例だと記述量は変わんないけど複数指定できたりするし、きっともっと便利なんだろうなと思いつつ、もうこのぐらいにしておきます。
+
+```haskell
+{-# LANGUAGE PatternSynonyms #-}
+
+data A = A
+
+pattern P :: A
+pattern P = A
+
+{-# COMPLETE P #-}
+
+foo :: A -> A
+foo P = A
+--foo _ = undefined
+```
 
 ---
 
