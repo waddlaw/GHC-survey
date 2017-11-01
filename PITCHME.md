@@ -199,7 +199,7 @@ Array# | boxed
 
 +++
 
-![Arrayの図](Array.png)
+![Array# の図](assets/Array.png)
 
 ---
 
