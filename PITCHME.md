@@ -169,7 +169,7 @@ unboxed type | ヒープポインタで表現されない型
 
 +++
 
-ヒープポインタの図
+![ヒープポインタの図](assets/heap-pointer.png)
 
 +++
 
@@ -199,7 +199,7 @@ Array# | boxed
 
 +++
 
-Array# の図
+![Array# の図](Array.png)
 
 ---
 
@@ -236,7 +236,7 @@ data Char# = ...
 
 +++
 
-表の画像
+![表の画像](assets/table.png)
 
 ---
 
