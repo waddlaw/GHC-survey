@@ -389,11 +389,23 @@ Answer: 大人を信じるのはやめよう！
 
 +++
 
-True Answer:
+Fake Answer:
 
 `toIntMaybe . fromIntMaybe = id`
 
 `fromIntMaybe . toIntMaybe = id`
+
++++
+
+追記
+
+僕を信じるのをやめよう！
+
+True Answer:
+
+`toIntMaybe . fromIntMaybe = id` は成り立ちません。 (反例: `Just 0`)
+
+igrep さん、[ご指摘](https://twitter.com/igrep/status/925933049530916864)ありがとうございます。
 
 ---
 
