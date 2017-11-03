@@ -403,7 +403,9 @@ Fake Answer:
 
 True Answer:
 
-`toIntMaybe . fromIntMaybe = id` は成り立ちません。 (反例: `Just 0`)
+`toIntMaybe . fromIntMaybe = id` <br>は成り立ちません。 (反例: `Just 0`)
+
+<br>
 
 igrep さん、[ご指摘](https://twitter.com/igrep/status/925933049530916864)ありがとうございます。
 
