@@ -401,7 +401,9 @@ Fake Answer:
 
 僕を信じるのをやめよう！
 
-True Answer:
+<br>
+
+True Answer
 
 `toIntMaybe . fromIntMaybe = id` <br>は成り立ちません。 (反例: `Just 0`)
 
