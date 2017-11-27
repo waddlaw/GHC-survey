@@ -437,6 +437,18 @@ liftIO $ print $ tcEqType k1 k2 -- False
 
 そのため、 `(->)` は引数が全て満たされた状態でしか適用してはいけないという特別なカインド規則があった。
 
+```bash
+>>> :k Int# -> Int
+Int# -> Int :: *
+
+>>> :k (->) Int# Int
+<interactive>:1:6: error:
+    • Expecting a lifted type, but 'Int#' is unlifted
+    • In the first argument of '(->)', namely 'Int#'
+      In the type '(->) Int# Int'
+```
+
+
 - `error` と `undefined` に型を与えるため
 
 ```haskell
