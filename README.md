@@ -1,8 +1,22 @@
-# GHC8.2.1-survey
+# GHC-survey
+
+## GHC-8.6.1, GHC-8.8.1
+
+- [GHC plans for 8.6.1](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.6.1)
+- [Release notes for version 8.6.1](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/8.6.1-notes.html)
+- [GHC plans for 8.8.1](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.8.1)
+
+### 発表内容
+
+発表内容 | 担当者 | 資料
+----|----|----
+Hadorian | @waddlaw 
+
+## GHC-8.2.1
 
 - [GHC plans for 8.2.1](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.2.1)
 
-## Front-end changes
+### 発表内容
 
 発表内容 | 担当者 | 資料
 ----|----|----
