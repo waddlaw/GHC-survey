@@ -1,6 +1,7 @@
 # GHC-survey
 
 バージョン | status | release note
+----|----|----
 8.8.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.8.1) |
 8.6.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.6.1) | [note](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/8.6.1-notes.html)
 8.2.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.2.1) | [note](https://downloads.haskell.org/~ghc/master/users-guide/8.2.1-notes.html)
