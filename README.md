@@ -12,7 +12,7 @@
 
 発表内容 | 担当者 | 資料
 ----|----|----
-Hadorian | @waddlaw 
+Hadrian | @waddlaw 
 
 ### GHC-8.2.1
 
