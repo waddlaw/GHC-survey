@@ -1,5 +1,7 @@
 # Source Plugin
 
+- [http://mpickering.github.io/plugins.html](http://mpickering.github.io/plugins.html)
+
 ## libraries
 
 - [nomeata/inspection-testing](https://github.com/nomeata/inspection-testing)
