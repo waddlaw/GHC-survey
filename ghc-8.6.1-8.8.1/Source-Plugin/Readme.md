@@ -1,6 +1,7 @@
 # Source Plugin
 
 - [ICFP 2018](https://icfp18.sigplan.org/event/hiw-2018-papers-source-plugins)
+- [Source plugins](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/extending_ghc.html#source-plugins)
 
 ## libraries
 
