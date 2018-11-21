@@ -1,6 +1,7 @@
 # note
 
 - `-fplugin-opt` オプションを使う
+- [GhcPlugins](https://www.stackage.org/haddock/nightly-2018-11-20/ghc-8.6.2/GhcPlugins.html) と [Plugins](https://www.stackage.org/haddock/nightly-2018-11-20/ghc-8.6.2/Plugins.html) があるが、GhcPlugins を import すれば良い
 
 ## 基本形
 
