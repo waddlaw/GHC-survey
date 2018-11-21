@@ -2,6 +2,7 @@
 
 - [ICFP 2018](https://icfp18.sigplan.org/event/hiw-2018-papers-source-plugins)
 - [Source plugins](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/extending_ghc.html#source-plugins)
+- [http://mpickering.github.io/plugins.html](http://mpickering.github.io/plugins.html)
 
 ## libraries
 
@@ -16,4 +17,3 @@
 
 - [Source Plugins: Four ways to build a typechecked Haskell expression](http://mpickering.github.io/posts/2018-06-11-source-plugins.html)
 - [Idiom brackets via source plugin](http://oleg.fi/gists/posts/2018-07-06-idiom-brackets-via-source-pluging.html)
-- [http://mpickering.github.io/plugins.html](http://mpickering.github.io/plugins.html)
