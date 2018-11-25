@@ -16,6 +16,12 @@ Hadrian | @waddlaw
 BlockArguments | @waddlaw
 NumericUnderscores | @waddlaw
 StarIsType | @waddlaw
+Source Plugins | @waddlaw
+GHCi :doc command | @waddlaw
+As-pattern synonyms | @waddlaw
+Valid Hole Fits | @Wataru
+Quantified Class Constraints | 
+DerivingVia | 
 
 ### GHC-8.2.1
 
