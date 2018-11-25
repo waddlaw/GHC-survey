@@ -1,6 +1,7 @@
 # BlockArguments
 
 - [ghc-proposals/ghc-proposals #90](https://github.com/ghc-proposals/ghc-proposals/pull/90)
+- [0010-block-arguments.rst](https://github.com/ghc-proposals/ghc-proposals/blob/36070b13d3f0970cda1faebc76afc220483340d6/proposals/0010-block-arguments.rst)
 - [BlockArguments - GHC manual](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#extension-BlockArguments)
 
 ## 言語拡張
