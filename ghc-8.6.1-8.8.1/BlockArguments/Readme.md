@@ -3,6 +3,9 @@
 - [ghc-proposals/ghc-proposals #90](https://github.com/ghc-proposals/ghc-proposals/pull/90)
 - [0010-block-arguments.rst](https://github.com/ghc-proposals/ghc-proposals/blob/36070b13d3f0970cda1faebc76afc220483340d6/proposals/0010-block-arguments.rst)
 - [BlockArguments - GHC manual](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#extension-BlockArguments)
+- [Allow do blocks without dollar signs as arguments](https://ghc.haskell.org/trac/ghc/ticket/10843)
+- [ArgumentDo -dev wiki](https://ghc.haskell.org/trac/ghc/wiki/ArgumentDo)
+- [commit](https://git.haskell.org/ghc.git/commitdiff/be84823b956f0aa09c58d94d1901f2dff13546b4)
 
 ## 言語拡張
 
