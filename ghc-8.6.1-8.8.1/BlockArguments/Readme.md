@@ -25,6 +25,7 @@
 - `mdo` (recursive do-notation)
 - `\case ` (Lambda-case)
 - `proc` (Arrow notation)
+- multiway if
 
 ## 例
 
