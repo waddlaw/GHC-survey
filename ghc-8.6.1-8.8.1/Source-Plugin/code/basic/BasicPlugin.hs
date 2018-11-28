@@ -1,6 +1,4 @@
-#!/usr/bin/env stack
--- stack repl --resolver ghc-8.6.2 --package ghc
-module SourcePlugin (plugin) where
+module BasicPlugin (plugin) where
 
 import Control.Monad.IO.Class
 import DynFlags (getDynFlags)

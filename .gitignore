@@ -2,3 +2,6 @@
 *.o
 *.dyn_o
 *.dyn_hi
+dist-newstyle
+.ghc.environment.*
+cabal.project.local

@@ -1,5 +1,7 @@
 # GHC-survey
 
+- [haskell/ghcup](https://github.com/haskell/ghcup) を使うと便利
+
 バージョン | status | release note
 ----|----|----
 8.8.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.8.1) |
