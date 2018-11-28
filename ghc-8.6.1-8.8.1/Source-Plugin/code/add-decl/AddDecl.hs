@@ -1,4 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
 module AddDecl (plugin) where
 
 import GhcPlugins
