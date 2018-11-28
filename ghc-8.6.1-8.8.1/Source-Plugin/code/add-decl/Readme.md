@@ -1,4 +1,4 @@
-# eval string
+# add decl
 
 ```hs
 $ cabal new-repl add-decl
