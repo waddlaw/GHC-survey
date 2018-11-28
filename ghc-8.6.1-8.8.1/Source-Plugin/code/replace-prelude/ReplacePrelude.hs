@@ -6,10 +6,6 @@ import HsExtension (GhcTc, GhcRn, GhcPs)
 import HsDecls (HsGroup)
 import HsExpr (LHsExpr)
 import HsSyn
-import Parser (parseDeclaration)
-import Lexer (unP, ParseResult(POk), mkPState)
-import HsDecls (LHsDecl)
-import StringBuffer (stringToStringBuffer)
 
 plugin :: Plugin
 plugin = defaultPlugin
