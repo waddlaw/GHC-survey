@@ -4,3 +4,5 @@ packages:
   add-decl
   replace-prelude
   use-replace-prelude
+  count-strict-fields
+  use-count-strict-fields
