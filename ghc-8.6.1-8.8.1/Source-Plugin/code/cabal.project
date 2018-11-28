@@ -1,4 +1,4 @@
 packages:
   basic
   basic-simple
-  print-type-info
+  add-decl

@@ -55,8 +55,10 @@ typeCheckPlugin (tc):
  a = ()}
 ```
 
-### print-type-info
+### add-decl
 
 ```shell
-$ cabal new-repl print-type-info
+$ cabal new-repl add-decl
+[g = 1 + 1, data MyData = MyData, a = (), $(return []), b :: Int,
+ b = g + 2]
 ```
