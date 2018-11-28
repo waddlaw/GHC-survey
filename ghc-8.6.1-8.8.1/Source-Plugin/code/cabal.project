@@ -2,3 +2,5 @@ packages:
   basic
   basic-simple
   add-decl
+  replace-prelude
+  use-replace-prelude

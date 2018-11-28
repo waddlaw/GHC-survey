@@ -1,6 +1,7 @@
 # GHC-survey
 
 - [haskell/ghcup](https://github.com/haskell/ghcup) を使うと便利
+- [ghc/ghc](https://github.com/ghc/ghc)
 
 バージョン | status | release note
 ----|----|----
