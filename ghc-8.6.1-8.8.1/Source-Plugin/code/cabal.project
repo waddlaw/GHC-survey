@@ -6,3 +6,5 @@ packages:
   use-replace-prelude
   count-strict-fields
   use-count-strict-fields
+  everywhere-has-call-stack
+  use-trace

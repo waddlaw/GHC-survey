@@ -62,3 +62,40 @@ $ cabal new-repl add-decl
 [g = 1 + 1, data MyData = MyData, a = (), $(return []), b :: Int,
  b = g + 2]
 ```
+
+### count-strict-fields
+
+```shell
+$ cabal new-repl use-count-strict-fields
+...
+========================================
+StrictData : True
+strict fields: 8/8
+========================================
+
+[2 of 2] Compiling Lib              ( Lib.hs, interpreted )
+
+========================================
+StrictData : False
+strict fields: 2/3
+========================================
+```
+
+### use-replace-prelude
+
+```shell
+$ cabal new-repl use-replace-prelude
+...
+[1 of 2] Compiling Lib              ( Lib.hs, interpreted )
+import modules:
+[import RIO]
+[2 of 2] Compiling Example          ( Example.hs, interpreted )
+import modules:
+[import RIO, import Lib]
+```
+
+### everywhere-has-call-stack
+
+```shell
+$ cabal new-repl use-trace
+```
