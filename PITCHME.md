@@ -747,6 +747,8 @@ lId :: Located (IdP GhcPs)
 lId = noLoc $ mkRdrUnqual $ mkClsOcc "HasCallStack"
 ```
 
++++
+
 #### プラグイン利用側のコード
 
 ```haskell
@@ -792,6 +794,8 @@ f8 = Just fError
 fError :: Int
 fError = error "fError"
 ```
+
++++
 
 #### 実行結果
 
