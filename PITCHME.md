@@ -52,11 +52,11 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 +++
 
-つまり `Desugar -> Core to core` の間に差し込むことができます。
+つまり `Desugar → Core to core` の間に差し込むことができます。
 
 +++
 
-### 実際に作られた plugin
+実際に作られた plugin もいくつかあります。
 
 - [strict-ghc-plugin](http://hackage.haskell.org/package/strict-ghc-plugin)
 - [cse-ghc-plugin](http://hackage.haskell.org/package/cse-ghc-plugin)
