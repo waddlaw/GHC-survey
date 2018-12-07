@@ -401,7 +401,7 @@ ghci> b
 
 ---
 
-### [No.3 Add Decl](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/add-decl/AddDecl.hs)
+### [No.4 Replace Prelude](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/replace-prelude/ReplacePrelude.hs)
 
 +++
 
@@ -411,9 +411,70 @@ ghci> b
 
 #### ソースコード
 
+```haskell
+module ReplacePrelude (plugin) where
+
+import GhcPlugins
+import TcRnTypes (IfM, TcM, TcGblEnv, tcg_binds, tcg_rn_decls)
+import HsExtension (GhcTc, GhcRn, GhcPs)
+import HsDecls (HsGroup)
+import HsExpr (LHsExpr)
+import HsSyn
+
+plugin :: Plugin
+plugin = defaultPlugin
+  { parsedResultAction = parsedPlugin
+  }
+
+parsedPlugin :: [CommandLineOption] -> ModSummary -> HsParsedModule -> Hsc HsParsedModule
+parsedPlugin _ _ pm = do
+  dflags <- getDynFlags
+
+  let extract = hsmodImports . unLoc
+      customPrelude = noLoc $ simpleImportDecl $ mkModuleName "RIO"
+
+      m = fmap (updateHsModule customPrelude) $ hpm_module pm
+      pm' = pm { hpm_module = m }
+
+  liftIO $ putStrLn $ "import modules: \n" ++ (showSDoc dflags $ ppr $ extract $ hpm_module pm')
+  return pm'
+
+updateHsModule :: LImportDecl pass -> HsModule pass -> HsModule pass
+updateHsModule importDecl hsm = hsm { hsmodImports = importDecl:decls }
+  where decls = hsmodImports hsm
+```
+
++++
+
+#### プラグイン利用側のコード
+
+```haskell
+module Example where
+
+import Lib
+
+aText :: Text
+aText = tshow a
+```
+
+```haskell
+module Lib where
+
+a = 1 + 1
+```
+
 +++
 
 #### 実行結果
+
+```haskell
+[1 of 2] Compiling Lib              ( Lib.hs, interpreted )
+import modules:
+[import RIO]
+[2 of 2] Compiling Example          ( Example.hs, interpreted )
+import modules:
+[import RIO, import Lib]
+```
 
 ---
 
