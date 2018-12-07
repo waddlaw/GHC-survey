@@ -44,11 +44,11 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ### 古の Source Plugin
 
-図の赤色の領域が古から存在する Source Plugin です。
-
 +++
 
 ![古の Source Plugin](images/map2.png)
+
+図の赤色の領域が古から存在する Source Plugin です。
 
 +++
 
