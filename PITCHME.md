@@ -112,6 +112,14 @@ GHC Source Plugin のおもしろさを伝えたい！
 - spliceRunAction
 - interfaceLoadAction
 
++++
+
+緑の領域に注目してみましょう
+
++++
+
+![拡大したNew Source Plugin](images/map4.png)
+
 ---
 
 ### 終わりに
