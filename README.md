@@ -37,3 +37,19 @@ Deriving | @pythonissam |
 Backpack | @matsubara0507 |
 Overloaded record fields | @matsubara0507 |
 Unpacked sum types | |
+
+## GHC の理解を深めるために
+
+- [GHC Developer Wiki](https://ghc.haskell.org/trac/ghc/)
+  - [The GHC reading list](https://ghc.haskell.org/trac/ghc/wiki/ReadingList)
+  - [The GHC Commentary](https://ghc.haskell.org/trac/ghc/wiki/Commentary)
+    - [Layout of important files and directories](https://ghc.haskell.org/trac/ghc/wiki/Commentary/SourceTree)
+    - [The Marvellous Module Structure of GHC](https://ghc.haskell.org/trac/ghc/wiki/Commentary/ModuleStructure)
+    - [GHC Source Code Abbreviations](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Abbreviations)
+    - [GHC Commentary: The Compiler](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler)
+  - [Debugging](https://ghc.haskell.org/trac/ghc/wiki/Debugging)
+
+- [A Haskell Implementation Reading List](http://www.stephendiehl.com/posts/essential_compilers.html)
+- [Dive into GHC: Pipeline](http://www.stephendiehl.com/posts/ghc_01.html)
+- [Dive into GHC: Intermediate Forms](http://www.stephendiehl.com/posts/ghc_02.html)
+- [Dive into GHC: Targeting Core](http://www.stephendiehl.com/posts/ghc_03.html)
