@@ -18,7 +18,11 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 +++
 
-![伝えたい画像](images/z.png)
+![面白さを伝える画像1](images/z.png)
+
++++
+
+![面白さを伝える画像2](images/sp.png)
 
 ---
 
