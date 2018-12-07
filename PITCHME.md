@@ -537,6 +537,7 @@ import modules:
 
 - 任意のモジュールを読み込める
 - 逆に任意のモジュールを強制的に削除できる
+- hlint のようなことをコンパイル時に行うことも可能
 
 ---
 
@@ -639,6 +640,175 @@ strict fields: 8/8
 StrictData : False
 strict fields: 2/3
 ========================================
+```
+
++++
+
+応用
+
++++
+
+- プログラムの情報を AST の形でいじることができる
+- Space leak check
+
+---
+
+### [No.6 Stack Trace](https://github.com/waddlaw/haskell-stack-trace-plugin)
+
++++
+
+- `HasCallStack` を追加しなくても完全なスタックトレースが取得できる
+
++++
+
+#### ソースコード
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+module StackTrace.Plugin (plugin) where
+  
+import GhcPlugins
+import TcRnTypes (IfM, TcM, TcGblEnv, tcg_binds, tcg_rn_decls)
+import HsExtension (GhcTc, GhcRn)
+import HsDecls (HsGroup)
+import HsExpr (LHsExpr)
+import HsSyn
+
+import Data.Maybe
+
+plugin :: Plugin
+plugin = defaultPlugin
+  { parsedResultAction = parsedPlugin
+  }
+
+parsedPlugin :: [CommandLineOption] -> ModSummary -> HsParsedModule -> Hsc HsParsedModule
+parsedPlugin _ _ pm = do
+  dflags <- getDynFlags
+
+  let extract = hsmodImports . unLoc
+      addGHCStackMod = noLoc $ simpleImportDecl $ mkModuleName "GHC.Stack"
+
+      m = updateHsModule addGHCStackMod updateHsmodDecl <$> hpm_module pm
+      pm' = pm { hpm_module = m }
+
+  return pm'
+
+updateHsModule :: LImportDecl GhcPs -> (LHsDecl GhcPs -> LHsDecl GhcPs) -> HsModule GhcPs -> HsModule GhcPs
+updateHsModule importDecl update hsm = hsm
+    { hsmodImports = importDecl:decls
+    , hsmodDecls = map update lhss
+    }
+  where
+    decls = hsmodImports hsm
+    lhss = hsmodDecls hsm
+
+--------------
+
+updateHsmodDecl :: LHsDecl GhcPs -> LHsDecl GhcPs
+updateHsmodDecl = fmap updateHsDecl
+
+updateHsDecl :: HsDecl GhcPs -> HsDecl GhcPs
+updateHsDecl (SigD xSig s) = SigD xSig (updateSig s)
+updateHsDecl decl = decl
+
+updateSig :: Sig GhcPs -> Sig GhcPs
+updateSig (TypeSig xSig ls t) = TypeSig xSig ls (updateLHsSigWcType t)
+updateSig sig = sig
+
+updateLHsSigWcType :: LHsSigWcType GhcPs -> LHsSigWcType GhcPs
+updateLHsSigWcType lhs@HsWC{} = lhs { hswc_body = updateLHsSigType (hswc_body lhs) }
+updateLHsSigWcType lhs@XHsWildCardBndrs{} = lhs
+
+updateLHsSigType :: LHsSigType GhcPs -> LHsSigType GhcPs
+updateLHsSigType lhs@HsIB{} = lhs { hsib_body = updateLHsType (hsib_body lhs )}
+updateLHsSigType lhs@XHsImplicitBndrs{} = lhs
+
+updateLHsType :: LHsType GhcPs -> LHsType GhcPs
+updateLHsType = fmap updateHsType
+
+-- Main process
+updateHsType :: HsType GhcPs -> HsType GhcPs
+updateHsType ty@(HsQualTy xty ctxt body) = HsQualTy xty (fmap appendHSC ctxt) body
+updateHsType ty@HsTyVar{}   = HsQualTy noExt (noLoc $ appendHSC []) (noLoc ty)
+updateHsType ty@HsAppTy{}   = HsQualTy noExt (noLoc $ appendHSC []) (noLoc ty)
+updateHsType ty@HsFunTy{}   = HsQualTy noExt (noLoc $ appendHSC []) (noLoc ty)
+updateHsType ty@HsListTy{}  = HsQualTy noExt (noLoc $ appendHSC []) (noLoc ty)
+updateHsType ty@HsTupleTy{} = HsQualTy noExt (noLoc $ appendHSC []) (noLoc ty)
+updateHsType ty = ty
+
+appendHSC :: HsContext GhcPs -> HsContext GhcPs
+appendHSC cs = mkHSC : cs
+
+-- make HasCallStack => constraint
+mkHSC :: LHsType GhcPs
+mkHSC = noLoc $ HsTyVar noExt NotPromoted lId
+
+lId :: Located (IdP GhcPs)
+lId = noLoc $ mkRdrUnqual $ mkClsOcc "HasCallStack"
+```
+
+#### プラグイン利用側のコード
+
+```haskell
+module Main where
+
+import Data.Maybe (fromJust)
+import GHC.Stack
+
+main :: IO ()
+main = print f1
+
+f1 :: Int
+f1 = f2
+
+f2 :: Int
+f2 = f3
+
+-- HsQualTy
+f3 :: HasCallStack => Int
+f3 = f4 0
+
+-- HsQualTy
+f4 :: Show a => a -> Int
+f4 _ = f5 0 0
+
+-- HsFunTy
+f5 :: Int -> Int -> Int
+f5 _ _ = head f6
+
+-- HsListTy
+f6 :: [Int]
+f6 = [fst f7]
+
+-- HsTupleTy
+f7 :: (Int, Int)
+f7 = (fromJust f8, fromJust f8)
+
+-- HsAppTy
+f8 :: Maybe Int
+f8 = Just fError
+
+-- HsTyVar
+fError :: Int
+fError = error "fError"
+```
+
+#### 実行結果
+
+```haskell
+example: fError
+CallStack (from HasCallStack):
+  error, called at example/Main.hs:40:10 in main:Main
+  fError, called at example/Main.hs:36:11 in main:Main
+  f8, called at example/Main.hs:32:16 in main:Main
+  f7, called at example/Main.hs:28:11 in main:Main
+  f6, called at example/Main.hs:24:15 in main:Main
+  f5, called at example/Main.hs:20:8 in main:Main
+  f4, called at example/Main.hs:16:6 in main:Main
+  f3, called at example/Main.hs:12:6 in main:Main
+  f2, called at example/Main.hs:9:6 in main:Main
+  f1, called at example/Main.hs:6:14 in main:Main
+  main, called at example/Main.hs:6:1 in main:Main
 ```
 
 ---
