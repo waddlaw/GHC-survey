@@ -61,6 +61,8 @@ GHC Source Plugin のおもしろさを伝えたい！
 - [strict-ghc-plugin](http://hackage.haskell.org/package/strict-ghc-plugin)
 - [cse-ghc-plugin](http://hackage.haskell.org/package/cse-ghc-plugin)
 
+当初はそこそこ期待したし、これで Strict Haskell の到来か！とも思った
+
 +++
 
 しかし・・・
