@@ -1,0 +1,10 @@
+packages:
+  basic
+  basic-simple
+  add-decl
+  replace-prelude
+  use-replace-prelude
+  count-strict-fields
+  use-count-strict-fields
+  everywhere-has-call-stack
+  use-trace
