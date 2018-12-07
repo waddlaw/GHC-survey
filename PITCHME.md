@@ -130,7 +130,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 - [ghc package - Stackage](https://www.stackage.org/nightly-2018-12-06/package/ghc-8.6.2) で関数名を検索すると結構良い感じに理解できる
 - GHC API は ghc のバージョンが変わるとだいぶ内容が変わるので、古いドキュメントを参照していないか注意
 
-+++
+---
 
 ## 作ってみた
 
