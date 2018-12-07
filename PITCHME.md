@@ -101,6 +101,8 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ### 終わりに
 
++++
+
 興味を持った人は、以下の資料を読めば完全に一人でプラグインを作れるようになります！
 
 - [Source Plugins - ICFP 2018](https://icfp18.sigplan.org/event/hiw-2018-papers-source-plugins)
@@ -109,4 +111,4 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ---
 
-### 作ってみよう!GHC SOURCE PLUGIN!!
+### 作ってみよう!<br>GHC SOURCE PLUGIN!!
