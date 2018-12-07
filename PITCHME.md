@@ -211,7 +211,7 @@ interfaceLoadPlugin _ iface = do
 
 #### 実行結果
 
-```shell
+```haskell
 parsePlugin:
 module Example where
 a = ()

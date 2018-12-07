@@ -1,5 +1,4 @@
 theme : night
-# highlight : mono-blue
 code-line-numbers : true
 transition : fade
 title : "GHC Source Plugin"
