@@ -83,7 +83,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 - `darcs` が現役だったので・・・
 - `Core` の知識が必要
 - `Core to core` の最適化にしか使えなかった
-- 当時は [ghc](https://hackage.haskell.org/package/ghc-8.6.1) パッケージとか無かった
+- 当時は GHC API を使う人なんてほぼ居なかった (情報無さ過ぎ)
 
 +++
 
