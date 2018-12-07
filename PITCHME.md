@@ -67,14 +67,16 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 +++
 
-### びっくりするほど流行らなかった！！！
-
 ![全然流行らなかった時の画像](images/neko.jpg)
+
+びっくりするほど流行らなかった！！！
 
 +++
 
 ### 理由 (たぶん)
 
+- Source Plugin の情報が無さ過ぎ
+- `darcs` が現役だったので・・・
 - `Core` の知識が必要
 - `Core to core` の最適化にしか使えなかった
 - 当時は [ghc](https://hackage.haskell.org/package/ghc-8.6.1) パッケージとか無かった
