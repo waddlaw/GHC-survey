@@ -101,7 +101,11 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ### New Source Plugin
 
++++
+
 ![New Source Plugin](images/map3.png)
+
+---
 
 ### 終わりに
 
