@@ -107,7 +107,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 +++
 
-図には載ってないけど、以下の場所にも差し込めます。
+図には載ってないけど<br>以下の場所にも差し込めます。
 
 - spliceRunAction
 - interfaceLoadAction
@@ -119,6 +119,12 @@ GHC Source Plugin のおもしろさを伝えたい！
 +++
 
 ![拡大したNew Source Plugin](images/map4.png)
+
++++
+
+#### プラグイン作成のコツ
+
+作ってみてわかりましたが、型が合えばだいたい動きます
 
 ---
 
