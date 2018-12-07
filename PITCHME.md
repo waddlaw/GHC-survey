@@ -209,6 +209,20 @@ interfaceLoadPlugin _ iface = do
 
 +++
 
+#### プラグイン利用側のコード
+
+```haskell
+{-# OPTIONS_GHC -fplugin BasicPlugin #-} 
+{-# LANGUAGE TemplateHaskell #-}
+module Example where
+
+a = ()
+
+$(return [])
+```
+
++++
+
 #### 実行結果
 
 ```haskell
@@ -227,6 +241,14 @@ typeCheckPlugin (tc):
    = Module (TrNameS "basic-0.1.0.0-inplace"#) (TrNameS "Example"#),
  a = ()}
 ```
+
++++
+
+応用
+
++++
+
+無し
 
 ---
 
@@ -294,6 +316,20 @@ interfaceLoadPlugin _ iface = do
 
 +++
 
+#### プラグイン利用側のコード
+
+```haskell
+{-# OPTIONS_GHC -fplugin BasicPlugin #-} 
+{-# LANGUAGE TemplateHaskell #-}
+module Example where
+
+a = ()
+
+$(return [])
+```
+
++++
+
 #### 実行結果
 
 ```haskell
@@ -314,6 +350,14 @@ typeCheckPlugin (tc):
        (TrNameS "basic-simple-0.1.0.0-inplace"#) (TrNameS "Example"#),
  a = ()}
 ```
+
++++
+
+応用
+
++++
+
+プラグイン作成時の雛形として十二分に利用可能
 
 ---
 
