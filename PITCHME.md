@@ -132,6 +132,17 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ---
 
+## プラグインの有効化
+
++++
+
+```cabal
+  ghc-options:
+    -fplugin=Plugin
+```
+
+---
+
 ## 作ってみた
 
 +++
