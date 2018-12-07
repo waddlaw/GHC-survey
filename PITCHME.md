@@ -817,7 +817,26 @@ CallStack (from HasCallStack):
 
 ---
 
-### 終わりに
+## DEMO
+
+stack に適用してみた
+
++++
+
+```haskell
+$ stack dot
+Prelude.undefined
+CallStack (from HasCallStack):
+  error, called at libraries/base/GHC/Err.hs:78:14 in base:GHC.Err
+  undefined, called at src/main/Main.hs:997:21 in main:Main
+  dotCmd, called at src/main/Main.hs:339:21 in main:Main
+  commandLineHandler, called at src/main/Main.hs:189:23 in main:Main
+  main, called at src/main/Main.hs:164:1 in main:Main
+```
+
+---
+
+## 終わりに
 
 +++
 
