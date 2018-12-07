@@ -95,7 +95,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 +++
 
-![時代が早すぎた時の画像](images/sega.jpg)
+![時代が早すぎた時の画像](images/sega.png)
 
 ---
 
