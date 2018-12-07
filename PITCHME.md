@@ -14,11 +14,15 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ## GHC Source Plugin とは？
 
+一言で説明できる素晴らしい図があるので次のスライドを見てください。
+
++++
+
 ![ICFP から図を引用](images/map.png)
 
 +++
 
-## 従来の Source Plugin
+### 従来の Source Plugin
 
 図の赤色の領域が従来の Source Plugin です。
 
