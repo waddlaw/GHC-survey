@@ -19,7 +19,7 @@ Hadrian | @waddlaw
 BlockArguments | @waddlaw
 NumericUnderscores | @waddlaw
 StarIsType | @waddlaw
-Source Plugins | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC8.2.1-survey/slide-ghc-source-plugin#/)
+Source Plugins | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC-survey/slide-ghc-source-plugin#/)
 GHCi :doc command | @waddlaw
 As-pattern synonyms | @waddlaw
 Valid Hole Fits | @Wataru
@@ -30,8 +30,8 @@ DerivingVia |
 
 発表内容 | 担当者 | 資料
 ----|----|----
-Levity polymorphism | @waddlaw | [paper](/levity/levity-polymorphism.md), [note](/levity/note.md), [slide](https://gitpitch.com/waddlaw/GHC8.2.1-survey/slide-levity-polymorphism#/)
-Exhaustiveness checking | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC8.2.1-survey/slide-pattern-synonyms#/) |
+Levity polymorphism | @waddlaw | [paper](/levity/levity-polymorphism.md), [note](/levity/note.md), [slide](https://gitpitch.com/waddlaw/GHC-survey/slide-levity-polymorphism#/)
+Exhaustiveness checking | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC-survey/slide-pattern-synonyms#/) |
 Indexed Typeable representations | @pythonissam |
 Deriving | @pythonissam |
 Backpack | @matsubara0507 |
