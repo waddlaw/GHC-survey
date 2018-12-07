@@ -124,7 +124,11 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 #### プラグイン作成のコツ
 
-作ってみてわかりましたが、型が合えばだいたい動きます
+- 作ってみてわかりましたが、型が合えばだいたい動きます
+- [GHC Source Code Abbreviations](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Abbreviations) を把握しておくとコードリーディングがはかどります
+- [haskell-code-explorer](https://haskell-code-explorer.mfix.io/package/ghc-8.4.3) が使えたら良いんだけど、8.6 系のドキュメント無い・・・
+- [ghc package - Stackage](https://www.stackage.org/nightly-2018-12-06/package/ghc-8.6.2) で関数名を検索すると結構良い感じに理解できる
+- GHC API は ghc のバージョンが変わるとだいぶ内容が変わるので、古いドキュメントを参照していないか注意
 
 ---
 
