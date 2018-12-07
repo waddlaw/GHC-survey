@@ -63,7 +63,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 +++
 
-当初はそこそこ期待したし<br>これで Strict Haskell の時代か！とも思った
+当初はそこそこ期待したし<br>これで Strict Haskell の時代到来か！とも思った
 
 +++
 
