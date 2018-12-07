@@ -1,4 +1,4 @@
-# GHC Source Plugin
+# GHC <br> Source <br> Plugin
 
 ---
 
