@@ -529,6 +529,15 @@ import modules:
 [import RIO, import Lib]
 ```
 
++++
+
+応用
+
++++
+
+- 任意のモジュールを読み込める
+- 逆に任意のモジュールを強制的に削除できる
+
 ---
 
 ### [No.5 Count Strict Fields](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/count-strict-fields/CountStrictFields.hs)
