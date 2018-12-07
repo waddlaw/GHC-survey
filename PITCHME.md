@@ -24,6 +24,10 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ![ICFP から図を引用](images/map.png)
 
+### みんな完全にわかりましたね！！！！
+
+わかった人は挙手
+
 +++
 
 ### 従来の Source Plugin
