@@ -48,7 +48,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ![古の Source Plugin](images/map2.png)
 
-図の赤色の領域が古から存在する Source Plugin です。
+図の赤色の領域が古から存在する Source Plugin
 
 +++
 
@@ -61,7 +61,9 @@ GHC Source Plugin のおもしろさを伝えたい！
 - [strict-ghc-plugin](http://hackage.haskell.org/package/strict-ghc-plugin)
 - [cse-ghc-plugin](http://hackage.haskell.org/package/cse-ghc-plugin)
 
-当初はそこそこ期待したし、これで Strict Haskell の到来か！とも思った
++++
+
+当初はそこそこ期待したし、これで Strict Haskell の時代か！とも思った
 
 +++
 
