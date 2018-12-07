@@ -140,13 +140,15 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ---
 
-### [その1 Basic](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/basic/BasicPlugin.hs)
+### [No.1 Basic](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/basic/BasicPlugin.hs)
 
 +++
 
 GHC のマニュアルに載っている例を動くようにしました。
 
 +++
+
+#### ソースコード
 
 ```haskell
 module BasicPlugin (plugin) where
@@ -207,9 +209,7 @@ interfaceLoadPlugin _ iface = do
 
 +++
 
-実行結果
-
-+++
+#### 実行結果
 
 ```shell
 parsePlugin:
