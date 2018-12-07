@@ -12,6 +12,7 @@
 - [kowainik/smuggler](https://github.com/kowainik/smuggler)
 - [phadej/idioms-plugins](https://github.com/phadej/idioms-plugins)
 - [google/haskell-indexer](https://github.com/google/haskell-indexer)
+- [waddlaw/haskell-stack-trace-plugin](https://github.com/waddlaw/haskell-stack-trace-plugin)
 
 ## blog articles
 
