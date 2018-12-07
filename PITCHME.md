@@ -10,6 +10,10 @@
 
 GHC Source Plugin のおもしろさを伝えたい！
 
++++
+
+![伝えたい画像](images/z.png)
+
 ---
 
 ## Source Plugin とは？
