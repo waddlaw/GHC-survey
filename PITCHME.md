@@ -107,6 +107,11 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ---
 
+図には載ってないけど、以下の場所にも差し込めます。
+
+- spliceRunAction
+- interfaceLoadAction
+
 ### 終わりに
 
 +++
