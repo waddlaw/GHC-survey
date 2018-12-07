@@ -138,9 +138,13 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 全部で6つ作りました
 
+---
+
+### [その1 Basic](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/basic/BasicPlugin.hs)
+
 +++
 
-### その1 Basic
+GHC のマニュアルに載っている例を動くようにしました。
 
 +++
 
@@ -199,6 +203,29 @@ interfaceLoadPlugin _ iface = do
   dflags <- getDynFlags
   liftIO $ putStrLn $ "interface loaded: " ++ (showSDoc dflags $ ppr $ mi_module iface)
   return iface
+```
+
++++
+
+実行結果
+
++++
+
+```shell
+parsePlugin:
+module Example where
+a = ()
+$(return [])
+typeCheckPlugin (rn): a = ()
+interface loaded: Language.Haskell.TH.Lib.Internal
+meta: return []
+typeCheckPlugin (rn):
+typeCheckPlugin (rn):
+Nothing
+typeCheckPlugin (tc):
+{$trModule
+   = Module (TrNameS "basic-0.1.0.0-inplace"#) (TrNameS "Example"#),
+ a = ()}
 ```
 
 ---
