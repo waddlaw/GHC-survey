@@ -39,7 +39,7 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 ### 全然流行らなかった！！！
 
-![全然流行らなかった時の画像](images/neko.png)
+![全然流行らなかった時の画像](images/neko.jpg)
 
 +++
 
