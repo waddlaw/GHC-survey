@@ -19,7 +19,7 @@ Hadrian | @waddlaw
 BlockArguments | @waddlaw
 NumericUnderscores | @waddlaw
 StarIsType | @waddlaw
-Source Plugins | @waddlaw
+Source Plugins | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC8.2.1-survey/slide-ghc-source-plugin#/)
 GHCi :doc command | @waddlaw
 As-pattern synonyms | @waddlaw
 Valid Hole Fits | @Wataru
