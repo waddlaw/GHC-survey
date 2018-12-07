@@ -443,6 +443,15 @@ ghci> b
 4
 ```
 
++++
+
+応用
+
++++
+
+- デバッグ用の関数をプラグイン側で定義しておく
+- 関数の実装をプラグインごとに変更できる
+
 ---
 
 ### [No.4 Replace Prelude](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/replace-prelude/ReplacePrelude.hs)
