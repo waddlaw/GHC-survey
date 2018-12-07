@@ -478,6 +478,109 @@ import modules:
 
 ---
 
+### [No.5 Count Strict Fields](https://github.com/waddlaw/GHC-survey/blob/master/ghc-8.6.1-8.8.1/Source-Plugin/code/count-strict-fields/CountStrictFields.hs)
+
++++
+
+- `StrictData` が有効かどうか表示
+- 定義されたフィールドの数と、そのうち Strict なフィールドの数を表示
+
++++
+
+#### ソースコード
+
+```haskell
+module CountStrictFields (plugin) where
+
+import GhcPlugins
+import TcRnTypes
+import HsExtension
+import HsDecls
+import HsTypes
+import qualified GHC.LanguageExtensions as LangExt
+
+plugin :: Plugin
+plugin = defaultPlugin
+  { renamedResultAction = renamedAction
+  }
+
+renamedAction :: [CommandLineOption] -> TcGblEnv -> HsGroup GhcRn -> TcM (TcGblEnv, HsGroup GhcRn)
+renamedAction _ tc gr = do
+  dflags <- getDynFlags
+  let isStrictData = xopt LangExt.StrictData dflags
+
+  let tyClDecls = map unLoc $ tyClGroupTyClDecls $ hs_tyclds gr
+      tyDataDecls = filter isDataDecl tyClDecls
+      hsDataDefn = map tcdDataDefn tyDataDecls
+      lConDecl = concatMap dd_cons hsDataDefn
+      decls = filter isConDeclH98 $ map unLoc lConDecl
+      lBangTypes = concatMap (hsConDeclArgTys . getConArgs) decls
+      fieldNums =
+        if isStrictData
+        then length lBangTypes
+        else length $ filter (isSrcStrict . getSrcStrictness . getBangStrictness) lBangTypes
+
+  liftIO $ putStrLn $ ""
+  liftIO $ putStrLn $ "========================================"
+  liftIO $ putStrLn $ "StrictData : " ++ (show isStrictData)
+  liftIO $ putStrLn $ "strict fields: " ++ (show fieldNums) ++ "/" ++ (show $ length lBangTypes)
+  liftIO $ putStrLn $ "========================================"
+  liftIO $ putStrLn $ ""
+
+  return (tc, gr)
+
+isConDeclH98 :: ConDecl pass -> Bool
+isConDeclH98 ConDeclH98{} = True
+isConDeclH98 _ = False
+
+getSrcStrictness :: HsSrcBang -> SrcStrictness
+getSrcStrictness (HsSrcBang _ _ ss) = ss
+```
+
++++
+
+#### プラグイン利用側のコード
+
+```haskell
+{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE Strict #-}
+module Example where
+
+data MyData1   = MyDataCon1
+data MyData2 a = MyDataCon2 a
+data MyData3 b = MyDataCon3 !b
+data MyData4   = MyDataCon4 Int
+data MyData5   = MyDataCon5 !Int Int Char Bool !(MyData3 Int)
+```
+
+```haskell
+{-# LANGUAGE BangPatterns #-}
+module Lib where
+
+data MyLib1 = MyLib1
+data MyLib2 = MyLib2 (Maybe Int) !(Maybe Int) !(Maybe Int)
+```
+
++++
+
+#### 実行結果
+
+```haskell
+========================================
+StrictData : True
+strict fields: 8/8
+========================================
+
+[2 of 2] Compiling Lib              ( Lib.hs, interpreted )
+
+========================================
+StrictData : False
+strict fields: 2/3
+========================================
+```
+
+---
+
 ### 終わりに
 
 +++
