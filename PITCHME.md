@@ -40,11 +40,17 @@ GHC Source Plugin のおもしろさを伝えたい！
 
 わかった人は挙手
 
-+++
+---
 
-### 従来の Source Plugin
+### 古の Source Plugin
 
 図の赤色の領域が従来の Source Plugin です。
+
++++
+
+![古の Source Plugin](images/map2.png)
+
++++
 
 `Desugar` -> `Core to core` の間に差し込むことができます。
 
