@@ -15,16 +15,16 @@
 
 発表内容 | 担当者 | 資料
 ----|----|----
-Hadrian | @waddlaw
-BlockArguments | @waddlaw
-NumericUnderscores | @waddlaw
-StarIsType | @waddlaw
+Hadrian
+BlockArguments
+NumericUnderscores
+StarIsType
 Source Plugins | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC-survey/slide-ghc-source-plugin#/)
-GHCi :doc command | @waddlaw
-As-pattern synonyms | @waddlaw
-Valid Hole Fits | @Wataru
-Quantified Class Constraints | 
-DerivingVia | 
+GHCi :doc command
+As-pattern synonyms 
+Valid Hole Fits | @Wataru | [slide](https://wataru86.github.io/slides/vhs/)
+Quantified Class Constraints
+DerivingVia
 
 ### GHC-8.2.1
 
