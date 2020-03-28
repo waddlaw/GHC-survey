@@ -1,13 +1,24 @@
 # GHC-survey
 
-- [haskell/ghcup](https://github.com/haskell/ghcup) を使うと便利
+- [haskell/ghcup](https://www.haskell.org/ghcup/) を使うと便利
 - [ghc/ghc](https://github.com/ghc/ghc)
 
 バージョン | status | release note
-----|----|----
-8.8.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.8.1) |
-8.6.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.6.1) | [note](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/8.6.1-notes.html)
-8.2.1 | [status](https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.2.1) | [note](https://downloads.haskell.org/~ghc/master/users-guide/8.2.1-notes.html)
+----|----|:----:
+8.10.1 | [status][status-8101] | [note][note-881]
+8.8.1 | [status][status-881] | [note][note-881]
+8.6.1 | [status][status-861] | [note][note-861]
+8.2.1 | [status][status-821] | [note][note-821]
+
+[status-8101]: https://gitlab.haskell.org/ghc/ghc/-/wikis/status/ghc-8.10.1
+[status-881]: https://gitlab.haskell.org/ghc/ghc/-/wikis/status/ghc-8.8.1
+[status-861]: https://gitlab.haskell.org/ghc/ghc/-/wikis/status/ghc-8.6.1
+[status-821]: https://gitlab.haskell.org/ghc/ghc/-/wikis/status/ghc-8.2.1
+
+[note-8101]: https://downloads.haskell.org/~ghc/8.10.1/docs/html/users_guide/8.10.1-notes.html
+[note-881]: https://downloads.haskell.org/~ghc/8.8.1/docs/html/users_guide/8.8.1-notes.html
+[note-861]: https://downloads.haskell.org/~ghc/8.6.1/docs/html/users_guide/8.6.1-notes.html 
+[note-821]: https://downloads.haskell.org/~ghc/8.6.1/docs/html/users_guide/8.2.1-notes.html 
 
 ## 発表内容
 
@@ -34,13 +45,13 @@ Levity polymorphism | @waddlaw | [paper](/levity/levity-polymorphism.md), [note]
 Exhaustiveness checking | @waddlaw | [slide](https://gitpitch.com/waddlaw/GHC-survey/slide-pattern-synonyms#/) |
 Indexed Typeable representations | @pythonissam |
 Deriving | @pythonissam |
-Backpack | @matsubara0507 |
+Backpack | @matsubara0507 | [slide](https://www.slideshare.net/noob00/haskell-backpack)
 Overloaded record fields | @matsubara0507 |
 Unpacked sum types | |
 
 ## GHC の理解を深めるために
 
-- [GHC Developer Wiki](https://ghc.haskell.org/trac/ghc/)
+- [GHC Developer Wiki](https://gitlab.haskell.org/ghc/ghc)
   - [The GHC reading list](https://ghc.haskell.org/trac/ghc/wiki/ReadingList)
   - [The GHC Commentary](https://ghc.haskell.org/trac/ghc/wiki/Commentary)
     - [Layout of important files and directories](https://ghc.haskell.org/trac/ghc/wiki/Commentary/SourceTree)
@@ -48,7 +59,7 @@ Unpacked sum types | |
     - [GHC Source Code Abbreviations](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Abbreviations)
     - [GHC Commentary: The Compiler](https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler)
   - [Debugging](https://ghc.haskell.org/trac/ghc/wiki/Debugging)
-
+- [The Glasgow Haskell Compiler a contributor's cheatsheet](https://ghc.dev/)
 - [A Haskell Implementation Reading List](http://www.stephendiehl.com/posts/essential_compilers.html)
 - [Dive into GHC: Pipeline](http://www.stephendiehl.com/posts/ghc_01.html)
 - [Dive into GHC: Intermediate Forms](http://www.stephendiehl.com/posts/ghc_02.html)
