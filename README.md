@@ -5,7 +5,7 @@
 
 バージョン | status | release note
 ----|----|:----:
-8.10.1 | [status][status-8101] | [note][note-881]
+8.10.1 | [status][status-8101] | [note][note-8101]
 8.8.1 | [status][status-881] | [note][note-881]
 8.6.1 | [status][status-861] | [note][note-861]
 8.2.1 | [status][status-821] | [note][note-821]
@@ -22,10 +22,23 @@
 
 ## 発表内容
 
+### GHC-8.10.1
+
+発表内容 | 担当者 | 資料
+--------|-------|----
+UnliftedNewtypes 
+StandaloneKindSignatures
+low-latency garbage collector
+ImportQualifiedPost
+`-Wderiving-defaults`
+`-Wunused-record-wildcards`, `-Wredundant-record-wildcards`
+Hierarchical Module Structure for GHC
+`:instances`
+
 ### GHC-8.6.1, GHC-8.8.1
 
 発表内容 | 担当者 | 資料
-----|----|----
+--------|-------|----
 Hadrian
 BlockArguments
 NumericUnderscores
